@@ -37,16 +37,29 @@
 body {
   margin: 0;
   padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow-x: hidden;
 }
 nav {
+  background-color: #ffffff;
   padding: 10px 20px;
-  box-shadow: 0 2px 2px 2px #d0d0d0;
+  box-shadow: 5px 5px 5px 5px #0005;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+  z-index: 2;
 }
 nav a {
   text-decoration: none;
+  font-size: 20px;
+}
+nav a:hover {
+  color: #ff79bc;
+}
+nav a:focus {
+  color: #ff79bc;
 }
 .mark i {
   color: #79ff79;
@@ -56,7 +69,7 @@ nav a {
   font-weight: bold;
 }
 .text-flame a {
-  color: #d0d0d0;
+  color: #adadad;
   margin: 0 10px;
 }
 .icon-flame a {
