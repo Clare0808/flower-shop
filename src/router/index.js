@@ -1,6 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import ProductPage from "@/components/ProductPage.vue";
+import ReviewPage from "@/components/ReviewPage.vue";
+import ContactPage from "@/components/ContactPage.vue";
+import UserPage from "@/components/UserPage.vue";
+import CartPage from "@/components/CartPage.vue";
+import LikePage from "@/components/LikePage.vue";
 
 const routes = [
   {
@@ -21,6 +26,31 @@ const routes = [
     path: "/products",
     name: "ProductPage",
     component: ProductPage,
+  },
+  {
+    path: "/review",
+    name: "ReviewPage",
+    component: ReviewPage,
+  },
+  {
+    path: "/contact",
+    name: "ContactPage",
+    component: ContactPage,
+  },
+  {
+    path: "/user",
+    name: "UserPage",
+    component: UserPage,
+  },
+  {
+    path: "/cart",
+    name: "CartPage",
+    component: CartPage,
+  },
+  {
+    path: "/like",
+    name: "LikePage",
+    component: LikePage,
   },
 ];
 

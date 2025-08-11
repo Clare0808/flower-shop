@@ -15,7 +15,7 @@
       <router-link to="/like">
         <i class="fa-solid fa-heart"></i>
       </router-link>
-      <router-link to="/buyCar">
+      <router-link to="/cart">
         <i class="fa-solid fa-cart-shopping"></i>
       </router-link>
       <router-link to="/user">

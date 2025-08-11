@@ -122,6 +122,7 @@ export default {
 }
 img {
   max-width: 90%;
+  box-shadow: 0px 0px 5px 3px #d0d0d0;
   cursor: pointer;
 }
 .function {

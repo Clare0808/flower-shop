@@ -53,7 +53,10 @@ export default {
 .container {
   width: 90%;
   padding: 50px;
-  display: flex;
+  display: grid;
+  grid-template-columns: 650px auto;
+  grid-template-rows: 100%;
+  gap: 20px;
   justify-content: center;
   align-items: center;
 }
@@ -61,7 +64,7 @@ export default {
   position: relative;
 }
 img {
-  width: 650px;
+  width: 100%;
 }
 .sec-title {
   width: 100%;
@@ -74,6 +77,8 @@ img {
   top: 40%;
 }
 .text-flame {
+  width: 100%;
+  height: 100%;
   text-align: start;
   padding-left: 20px;
   display: flex;
@@ -88,6 +93,7 @@ img {
 .description {
   margin-bottom: 10px;
   font-size: 20px;
+  color: #adadad;
 }
 .btn {
   width: 100px;
