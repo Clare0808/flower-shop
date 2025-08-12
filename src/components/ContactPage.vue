@@ -63,6 +63,10 @@ input {
   border-radius: 10px;
   margin: 10px 10px;
 }
+input:focus {
+  outline: none;
+  border: 1px solid #ff79bc;
+}
 .input-name {
   margin-top: 20px;
 }

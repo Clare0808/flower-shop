@@ -6,6 +6,7 @@ import ContactPage from "@/components/ContactPage.vue";
 import UserPage from "@/components/UserPage.vue";
 import CartPage from "@/components/CartPage.vue";
 import LikePage from "@/components/LikePage.vue";
+import LoginPage from "@/components/LoginPage.vue";
 
 const routes = [
   {
@@ -51,6 +52,11 @@ const routes = [
     path: "/like",
     name: "LikePage",
     component: LikePage,
+  },
+  {
+    path: "/login",
+    name: "LoginPage",
+    component: LoginPage,
   },
 ];
 

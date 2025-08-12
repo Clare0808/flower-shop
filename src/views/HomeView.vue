@@ -8,14 +8,27 @@
         love and deep fascination, Lily, Daisy, a great symbol of happiness,
         Camellia, symbolise love and affection...
       </div>
-      <div class="btn">Shop Now</div>
+      <div class="btn" @click="ClickBtn">Shop Now</div>
     </div>
   </div>
 </template>
 
 <script>
+import { useRouter } from "vue-router";
+
 export default {
   name: "HomeView",
+  setup() {
+    const router = useRouter();
+
+    const ClickBtn = () => {
+      router.push("/products");
+    };
+
+    return {
+      ClickBtn,
+    };
+  },
 };
 </script>
 
