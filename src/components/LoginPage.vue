@@ -48,6 +48,7 @@ import { useRouter } from "vue-router";
 
 export const userMail = ref("");
 export const userName = ref("");
+export const loginStatus = ref(false);
 
 export default {
   name: "LoginPage",
@@ -133,6 +134,11 @@ export default {
 
             userMail.value = localStorage.setItem("userMail", filterData.email);
             userName.value = localStorage.setItem("userName", filterData.name);
+
+            userMail.value = filterData.email;
+            userName.value = filterData.name;
+
+            loginStatus.value = true;
 
             CleanInput();
 

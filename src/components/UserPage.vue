@@ -9,32 +9,17 @@
         <img src="@/assets/user1.jpg" />
       </div>
       <div class="text-flame">
-        <div class="info">
-          <div class="info-title">Name</div>
-          <div class="detail-info">
-            <div class="info-content">{{ userName }}</div>
-            <i class="fa-solid fa-pencil" id="pen"></i>
-          </div>
-        </div>
-        <div class="info">
-          <div class="info-title">Birthday</div>
-          <div class="detail-info">
-            <div class="info-content">2023/10/31</div>
-            <i class="fa-solid fa-pencil" id="pen"></i>
-          </div>
-        </div>
-        <div class="info">
-          <div class="info-title">Email</div>
-          <div class="detail-info">
-            <div class="info-content">{{ userMail }}</div>
-            <i class="fa-solid fa-pencil" id="pen"></i>
-          </div>
-        </div>
-        <div class="info">
-          <div class="info-title">Number</div>
-          <div class="detail-info">
-            <div class="info-content">0912345678</div>
-            <i class="fa-solid fa-pencil" id="pen"></i>
+        <div v-for="(d, index) in data" :key="index">
+          <div class="info">
+            <div class="info-title">{{ d.title }}</div>
+            <div class="detail-info">
+              <div class="info-content">{{ d.content }}</div>
+              <i
+                class="fa-solid fa-pencil"
+                id="pen"
+                @click="ModifyInfo(index)"
+              ></i>
+            </div>
           </div>
         </div>
       </div>
@@ -43,22 +28,78 @@
         <i class="fa-solid fa-arrow-right-from-bracket"></i>
       </div>
     </div>
+
+    <ModifyPage class="modify-page" v-if="penClick" />
   </div>
 </template>
 
 <script>
-import { onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
-import { userMail, userName } from "@/components/LoginPage.vue";
+import { userMail, userName, loginStatus } from "@/components/LoginPage.vue";
+import ModifyPage from "@/components/ModifyPage.vue";
+
+export const penClick = ref(false);
+export const modifyData = ref({});
 
 export default {
   name: "UserPage",
+  components: {
+    ModifyPage,
+  },
   setup() {
     const router = useRouter();
+    const data = ref([
+      {
+        id: 1,
+        type: "text",
+        title: "Name",
+        content: userName.value,
+      },
+      {
+        id: 2,
+        type: "date",
+        title: "Birthday",
+        content: "None",
+      },
+      {
+        id: 3,
+        type: "text",
+        title: "Email",
+        content: userMail.value,
+      },
+      {
+        id: 4,
+        type: "number",
+        title: "Number",
+        content: "None",
+      },
+    ]);
 
     const ClickBtn = () => {
+      loginStatus.value = false;
+
+      localStorage.removeItem("userMail");
+      localStorage.removeItem("userName");
+
       router.push("/login");
     };
+
+    const ModifyInfo = (index) => {
+      penClick.value = true;
+
+      modifyData.value = {
+        index: index,
+        type: data.value[index].type,
+        title: data.value[index].title,
+        content: data.value[index].content,
+      };
+    };
+
+    watch(penClick);
+    watch(modifyData, (newValue) => {
+      data.value[newValue.index].content = newValue.content;
+    });
 
     onMounted(() => {
       userMail.value = localStorage.getItem("userMail");
@@ -68,7 +109,12 @@ export default {
     return {
       userMail,
       userName,
+      loginStatus,
+      penClick,
+      modifyData,
+      data,
       ClickBtn,
+      ModifyInfo,
     };
   },
 };
@@ -81,6 +127,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 .title {
   font-size: 30px;
@@ -159,5 +206,12 @@ img {
 .btn:hover {
   background-color: #ff79bc;
   cursor: pointer;
+}
+
+.modify-page {
+  width: 40%;
+  position: absolute;
+  top: 25%;
+  z-index: 2;
 }
 </style>

@@ -4,14 +4,14 @@
       <i class="fa-solid fa-seedling"></i>
       Flower
     </div>
-    <div class="text-flame">
+    <div class="text-flame" v-if="loginStatus">
       <router-link to="/">Home</router-link>
       <router-link to="/about">About</router-link>
       <router-link to="/products">Products</router-link>
       <router-link to="/review">Review</router-link>
       <router-link to="/contact">Contact</router-link>
     </div>
-    <div class="icon-flame">
+    <div class="icon-flame" v-if="loginStatus">
       <router-link to="/like">
         <i class="fa-solid fa-heart"></i>
       </router-link>
@@ -25,6 +25,35 @@
   </nav>
   <router-view />
 </template>
+
+<script>
+import { onMounted } from "vue";
+import { userMail, userName, loginStatus } from "@/components/LoginPage.vue";
+
+export default {
+  setup() {
+    onMounted(() => {
+      const storeMail = localStorage.getItem("userMail");
+      const storeName = localStorage.getItem("userName");
+
+      if (storeMail && storeName) {
+        userMail.value = storeMail;
+        userName.value = storeName;
+
+        loginStatus.value = true;
+      } else {
+        loginStatus.value = false;
+      }
+    });
+
+    return {
+      userMail,
+      userName,
+      loginStatus,
+    };
+  },
+};
+</script>
 
 <style lang="scss">
 #app {
