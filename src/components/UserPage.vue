@@ -9,7 +9,7 @@
         <img src="@/assets/user1.jpg" />
       </div>
       <div class="text-flame">
-        <div v-for="(d, index) in data" :key="index">
+        <div v-for="(d, index) in userData" :key="index">
           <div class="info">
             <div class="info-title">{{ d.title }}</div>
             <div class="detail-info">
@@ -17,6 +17,7 @@
               <i
                 class="fa-solid fa-pencil"
                 id="pen"
+                v-if="d.title !== 'Email'"
                 @click="ModifyInfo(index)"
               ></i>
             </div>
@@ -49,32 +50,7 @@ export default {
   },
   setup() {
     const router = useRouter();
-    const data = ref([
-      {
-        id: 1,
-        type: "text",
-        title: "Name",
-        content: userName.value,
-      },
-      {
-        id: 2,
-        type: "date",
-        title: "Birthday",
-        content: "None",
-      },
-      {
-        id: 3,
-        type: "text",
-        title: "Email",
-        content: userMail.value,
-      },
-      {
-        id: 4,
-        type: "number",
-        title: "Number",
-        content: "None",
-      },
-    ]);
+    const userData = ref([]);
 
     const ClickBtn = () => {
       loginStatus.value = false;
@@ -90,20 +66,60 @@ export default {
 
       modifyData.value = {
         index: index,
-        type: data.value[index].type,
-        title: data.value[index].title,
-        content: data.value[index].content,
+        type: userData.value[index].type,
+        title: userData.value[index].title,
+        content: userData.value[index].content,
       };
     };
 
+    const GetUserInfo = async () => {
+      const response = await fetch("http://localhost:5000/api/info");
+      const data = await response.json();
+      console.log(data);
+
+      const filterData = data.data.find(
+        (item) => item.email === userMail.value
+      );
+      console.log(filterData, userMail.value);
+
+      userData.value = [
+        {
+          id: 1,
+          type: "text",
+          title: "Name",
+          content: filterData.name,
+        },
+        {
+          id: 2,
+          type: "date",
+          title: "Birthday",
+          content: filterData.birthday,
+        },
+        {
+          id: 3,
+          type: "text",
+          title: "Email",
+          content: filterData.email,
+        },
+        {
+          id: 4,
+          type: "number",
+          title: "Number",
+          content: filterData.number,
+        },
+      ];
+    };
+
     watch(penClick);
-    watch(modifyData, (newValue) => {
-      data.value[newValue.index].content = newValue.content;
+    watch(modifyData, async (newValue) => {
+      userData.value[newValue.index].content = newValue.content;
     });
 
-    onMounted(() => {
+    onMounted(async () => {
       userMail.value = localStorage.getItem("userMail");
       userName.value = localStorage.getItem("userName");
+
+      await GetUserInfo();
     });
 
     return {
@@ -112,9 +128,10 @@ export default {
       loginStatus,
       penClick,
       modifyData,
-      data,
+      userData,
       ClickBtn,
       ModifyInfo,
+      GetUserInfo,
     };
   },
 };

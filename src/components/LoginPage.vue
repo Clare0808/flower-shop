@@ -91,7 +91,7 @@ export default {
       await EmailCheck();
 
       if (!showError.value) {
-        const response = await fetch("http://localhost:5000/api/signin", {
+        const signInResponse = await fetch("http://localhost:5000/api/signin", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -103,7 +103,24 @@ export default {
           }),
         });
 
-        if (!response.ok) {
+        if (!signInResponse.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const userResponse = await fetch("http://localhost:5000/api/user", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: name.value,
+            email: email.value,
+            birthday: "None",
+            number: "None",
+          }),
+        });
+
+        if (!userResponse.ok) {
           throw new Error("Network response was not ok");
         }
 

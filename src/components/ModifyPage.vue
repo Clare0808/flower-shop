@@ -4,6 +4,7 @@
       <span style="color: #ff79bc">Modify</span>
       Information
     </div>
+    <div class="success" v-if="showSuccess">{{ successMsg }}</div>
     <div class="container">
       <div class="flame">
         <div class="info-title">Original {{ modifyData.title }}</div>
@@ -27,19 +28,66 @@
 <script>
 import { ref, watch } from "vue";
 import { penClick, modifyData } from "@/components/UserPage.vue";
+import { userMail } from "@/components/LoginPage.vue";
+import { useRouter } from "vue-router";
 
 export default {
   setup() {
     const inputInfo = ref("");
+    const router = useRouter();
+    const showSuccess = ref(false);
+    const successMsg = ref("");
 
     const ClickBtn = () => {
       penClick.value = false;
     };
 
-    const ClickCheckBtn = () => {
+    const ClickCheckBtn = async () => {
       modifyData.value.content = inputInfo.value;
 
-      penClick.value = false;
+      const responseUser = await fetch("http://localhost:5000/api/modify", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: userMail.value,
+          title: modifyData.value.title.toLowerCase(),
+          value: modifyData.value.content,
+        }),
+      });
+
+      if (modifyData.value.title === "name") {
+        const responseLogin = await fetch(
+          "http://localhost:5000/api/login/modify",
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: userMail.value,
+              title: modifyData.value.title.toLowerCase(),
+              value: modifyData.value.content,
+            }),
+          }
+        );
+
+        const result = await responseLogin.json();
+        console.log("更新結果：", result);
+      }
+
+      const result = await responseUser.json();
+      console.log("User更新結果：", result);
+
+      successMsg.value = "Modify SuccessFully !";
+      showSuccess.value = true;
+
+      setTimeout(() => {
+        router.go(0);
+        showSuccess.value = false;
+        penClick.value = false;
+      }, 1000);
     };
 
     watch(modifyData);
@@ -47,7 +95,10 @@ export default {
     return {
       penClick,
       modifyData,
+      userMail,
       inputInfo,
+      showSuccess,
+      successMsg,
       ClickBtn,
       ClickCheckBtn,
     };
@@ -64,12 +115,23 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 .title {
   font-size: 30px;
   background-color: #ffd9ec;
   width: 90%;
   padding: 2px;
+}
+.success {
+  position: absolute;
+  bottom: 30px;
+  left: 5%;
+  background-color: #a6ffa6;
+  color: #00db00;
+  padding: 20px;
+  text-align: center;
+  font-size: 18px;
 }
 .container {
   width: 90%;
