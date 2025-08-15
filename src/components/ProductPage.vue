@@ -4,12 +4,13 @@
       Least
       <span style="color: #ff79bc">Product</span>
     </div>
+    <div class="success" v-if="showSuccess">{{ successMsg }}</div>
     <div class="container">
       <div class="pro-flame" v-for="(p, index) in productsData" :key="index">
         <div class="img-flame">
           <img :src="p.img" @click="ShowFunction(index)" />
           <div class="function">
-            <i class="fa-solid fa-heart"></i>
+            <i class="fa-solid fa-heart" @click="SendLikeData(index)"></i>
             <div class="add">Add To Cart</div>
             <i class="fa-solid fa-share"></i>
           </div>
@@ -23,6 +24,7 @@
 
 <script>
 import { ref } from "vue";
+import { userMail } from "@/components/LoginPage.vue";
 
 export default {
   name: "ProductPage",
@@ -66,6 +68,8 @@ export default {
       },
     ];
     const hover = ref(false);
+    const successMsg = ref("");
+    const showSuccess = ref(false);
 
     const ShowFunction = (index) => {
       hover.value = !hover.value;
@@ -81,10 +85,40 @@ export default {
       });
     };
 
+    const SendLikeData = async (index) => {
+      const userResponse = await fetch("http://localhost:5000/api/storelike", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: userMail.value,
+          product: productsData[index].name,
+          price: productsData[index].price,
+          image: productsData[index].img,
+        }),
+      });
+
+      if (!userResponse.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      successMsg.value = "Put in favorate !";
+      showSuccess.value = true;
+
+      setTimeout(() => {
+        showSuccess.value = false;
+      }, 2000);
+    };
+
     return {
+      userMail,
       productsData,
       hover,
+      successMsg,
+      showSuccess,
       ShowFunction,
+      SendLikeData,
     };
   },
 };
@@ -103,6 +137,16 @@ export default {
   background-color: #ffd9ec;
   width: 90%;
   padding: 2px;
+}
+.success {
+  position: absolute;
+  right: 5%;
+  top: 80px;
+  background-color: #a6ffa6;
+  color: #00db00;
+  padding: 20px;
+  text-align: center;
+  font-size: 18px;
 }
 .container {
   width: 90%;

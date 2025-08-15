@@ -5,14 +5,14 @@
       <span style="color: #ff79bc">Favorate</span>
     </div>
     <div class="container">
-      <div class="flame" v-for="i in 6" :key="i">
-        <img src="@/assets/product2.jpg" />
+      <div class="flame" v-for="(p, index) in likeData" :key="index">
+        <img :src="p.image" />
         <div class="item-flame">
           <div class="text-flame">
-            <div class="name">Flower Pot</div>
-            <div class="price">$15.99</div>
+            <div class="name">{{ p.product }}</div>
+            <div class="price">{{ p.price }}</div>
           </div>
-          <i class="fa-solid fa-heart"></i>
+          <i class="fa-solid fa-heart" @click="RemoveLike(index)"></i>
         </div>
       </div>
     </div>
@@ -20,8 +20,52 @@
 </template>
 
 <script>
+import { ref, onMounted } from "vue";
+import { userMail } from "@/components/LoginPage.vue";
+
 export default {
   name: "LikePage",
+  setup() {
+    const likeData = ref([]);
+
+    const GetLikeData = async () => {
+      const response = await fetch("http://localhost:5000/api/getlike");
+      const data = await response.json();
+
+      const filterData = data.data.filter(
+        (item) => item.email === userMail.value
+      );
+
+      likeData.value = filterData;
+
+      console.log(likeData.value);
+    };
+
+    const RemoveLike = async (index) => {
+      const response = await fetch("http://localhost:5000/api/delete", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ like_id: index }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+    };
+
+    onMounted(() => {
+      GetLikeData();
+    });
+
+    return {
+      userMail,
+      likeData,
+      GetLikeData,
+      RemoveLike,
+    };
+  },
 };
 </script>
 
