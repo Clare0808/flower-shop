@@ -27,17 +27,18 @@ def getlike():
 
     return jsonify({"data": data_list}), 206
 
-@api_bp.route('/delete', methods=["POST"])
+@api_bp.route('/delete', methods=['POST'])
 def delete():
     data = request.get_json()
     
-    like_id = data.get('like_id')
+    product = data.get('product')
 
-    like = Like.query.get(like_id)
+    like = Like.query.filter_by(product=product).first()
 
     if like:
         db.session.delete(like)
         db.session.commit()
-        return jsonify({"message": "刪除成功"}), 204
+        return jsonify({"message": "刪除成功"}), 200
     else:
         return jsonify({"error": "找不到指定的 Like"}), 404
+    

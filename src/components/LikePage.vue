@@ -12,7 +12,7 @@
             <div class="name">{{ p.product }}</div>
             <div class="price">{{ p.price }}</div>
           </div>
-          <i class="fa-solid fa-heart" @click="RemoveLike(index)"></i>
+          <i class="fa-solid fa-heart" @click="RemoveLike(p.product)"></i>
         </div>
       </div>
     </div>
@@ -37,22 +37,22 @@ export default {
       );
 
       likeData.value = filterData;
-
-      console.log(likeData.value);
     };
 
-    const RemoveLike = async (index) => {
+    const RemoveLike = async (product) => {
       const response = await fetch("http://localhost:5000/api/delete", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ like_id: index }),
+        body: JSON.stringify({ product }),
       });
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
+
+      GetLikeData();
     };
 
     onMounted(() => {
@@ -120,5 +120,8 @@ i {
 }
 i {
   padding-right: 20px;
+}
+i:hover {
+  color: #ffd9ec;
 }
 </style>
