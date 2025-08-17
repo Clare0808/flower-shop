@@ -25,8 +25,20 @@
 </template>
 
 <script>
+import { cartData } from "@/components/BuyPage.vue";
+import { onMounted } from "vue";
+
 export default {
   name: "CartPage",
+  setup() {
+    onMounted(() => {
+      console.log(cartData.value);
+    });
+
+    return {
+      cartData,
+    };
+  },
 };
 </script>
 

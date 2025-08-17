@@ -4,6 +4,7 @@
       Your
       <span style="color: #ff79bc">Favorate</span>
     </div>
+    <div class="success" v-if="showSuccess">{{ successMsg }}</div>
     <div class="container">
       <div class="flame" v-for="(p, index) in likeData" :key="index">
         <img :src="p.image" />
@@ -27,6 +28,8 @@ export default {
   name: "LikePage",
   setup() {
     const likeData = ref([]);
+    const showSuccess = ref(false);
+    const successMsg = ref("");
 
     const GetLikeData = async () => {
       const response = await fetch("http://localhost:5000/api/getlike");
@@ -53,6 +56,13 @@ export default {
       }
 
       GetLikeData();
+
+      successMsg.value = "Remove successfully !";
+      showSuccess.value = true;
+
+      setTimeout(() => {
+        showSuccess.value = false;
+      }, 2000);
     };
 
     onMounted(() => {
@@ -62,6 +72,8 @@ export default {
     return {
       userMail,
       likeData,
+      showSuccess,
+      successMsg,
       GetLikeData,
       RemoveLike,
     };
@@ -82,6 +94,17 @@ export default {
   background-color: #ffd9ec;
   width: 90%;
   padding: 2px;
+}
+.success {
+  position: fixed;
+  right: 5%;
+  top: 80px;
+  z-index: 2;
+  background-color: #a6ffa6;
+  color: #00db00;
+  padding: 20px;
+  text-align: center;
+  font-size: 18px;
 }
 .container {
   width: 85%;

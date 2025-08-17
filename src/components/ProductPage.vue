@@ -15,7 +15,7 @@
               :class="{ liked: p.like }"
               @click="SendLikeData(index)"
             ></i>
-            <div class="add">Add To Cart</div>
+            <div class="add" @click="ShowBuyPage(index)">Add To Cart</div>
             <i class="fa-solid fa-share"></i>
           </div>
         </div>
@@ -23,15 +23,25 @@
         <div class="price">${{ p.price }}</div>
       </div>
     </div>
+
+    <BuyPage class="buy-page" v-if="showBuy" />
   </div>
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { userMail } from "@/components/LoginPage.vue";
+import BuyPage from "@/components/BuyPage.vue";
+import { showBuySuccess } from "@/components/BuyPage.vue";
+
+export const showBuy = ref(false);
+export const buyData = ref({});
 
 export default {
   name: "ProductPage",
+  components: {
+    BuyPage,
+  },
   setup() {
     const productsData = ref([
       {
@@ -187,34 +197,53 @@ export default {
       }
     };
 
+    const ShowBuyPage = (index) => {
+      showBuy.value = true;
+
+      buyData.value = productsData.value[index];
+    };
+
+    watch(showBuy);
+    watch(showBuySuccess, () => {
+      successMsg.value = "Add in cart successfully !";
+      showSuccess.value = true;
+
+      showBuySuccess.value = false;
+
+      setTimeout(() => {
+        showSuccess.value = false;
+      }, 2000);
+    });
+
     onMounted(() => {
       HandleLike();
     });
 
     return {
       userMail,
+      showBuySuccess,
       productsData,
       hover,
       successMsg,
       showSuccess,
+      showBuy,
       ShowFunction,
       SendLikeData,
       HandleLike,
+      ShowBuyPage,
     };
   },
 };
 </script>
 
 <style scoped>
-body {
-  position: relative;
-}
 .product {
   margin-top: 50px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 .title {
   font-size: 30px;
@@ -289,5 +318,12 @@ i.liked {
 .price {
   color: #ff79bc;
   font-size: 25px;
+}
+
+.buy-page {
+  width: 40%;
+  position: fixed;
+  top: 15%;
+  z-index: 2;
 }
 </style>
