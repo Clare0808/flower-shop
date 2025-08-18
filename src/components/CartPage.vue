@@ -5,17 +5,17 @@
       <span style="color: #ff79bc">Cart</span>
     </div>
     <div class="container">
-      <div class="flame" v-for="i in 8" :key="i">
+      <div class="flame" v-for="(c, index) in cartData" :key="index">
         <div class="items-flame">
-          <img src="@/assets/product1.jpg" />
+          <img :src="c.img" />
           <div class="item-info">
             <div class="text-flame">
-              <div class="item-name">Flowers Pot</div>
-              <div class="item-quan">x3</div>
+              <div class="item-name">{{ c.name }}</div>
+              <div class="item-quan">x{{ c.quantity }}</div>
             </div>
             <div class="num-flame">
-              <div class="item-price">$15.99</div>
-              <div class="total-price">$47.97</div>
+              <div class="item-price">${{ c.price }}</div>
+              <div class="total-price">${{ c.total }}</div>
             </div>
           </div>
         </div>
@@ -25,18 +25,35 @@
 </template>
 
 <script>
-import { cartData } from "@/components/BuyPage.vue";
-import { onMounted } from "vue";
+import { ref, onMounted } from "vue";
+import { userMail } from "@/components/LoginPage.vue";
 
 export default {
   name: "CartPage",
   setup() {
-    onMounted(() => {
+    const cartData = ref([]);
+
+    const GetCartData = async () => {
+      const response = await fetch("http://localhost:5000/api/getcart");
+      const data = await response.json();
+
+      const filterData = data.data.filter(
+        (item) => item.email === userMail.value
+      );
+
+      cartData.value = filterData;
+
       console.log(cartData.value);
+    };
+
+    onMounted(() => {
+      GetCartData();
     });
 
     return {
       cartData,
+      userMail,
+      GetCartData,
     };
   },
 };

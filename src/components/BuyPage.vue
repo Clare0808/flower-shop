@@ -39,8 +39,8 @@
 <script>
 import { ref } from "vue";
 import { showBuy, buyData } from "@/components/ProductPage.vue";
+import { userMail } from "@/components/LoginPage.vue";
 
-export const cartData = ref({});
 export const showBuySuccess = ref(false);
 
 export default {
@@ -64,14 +64,25 @@ export default {
       total.value = counter.value * buyData.value.price;
     };
 
-    const SendBuy = () => {
-      cartData.value = {
-        name: buyData.value.name,
-        price: buyData.value.price,
-        img: buyData.value.price,
-        quantity: counter.value,
-        total: total.value,
-      };
+    const SendBuy = async () => {
+      const response = await fetch("http://localhost:5000/api/storecart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: userMail.value,
+          name: buyData.value.name,
+          price: buyData.value.price,
+          img: buyData.value.img,
+          quantity: counter.value,
+          total: total.value,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
 
       CloseBuyPage();
 
@@ -81,6 +92,7 @@ export default {
     return {
       showBuy,
       buyData,
+      userMail,
       counter,
       total,
       CloseBuyPage,
