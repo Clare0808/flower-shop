@@ -42,6 +42,7 @@ import ModifyPage from "@/components/ModifyPage.vue";
 
 export const penClick = ref(false);
 export const modifyData = ref({});
+export const userImage = ref("");
 
 export default {
   name: "UserPage",
@@ -120,6 +121,8 @@ export default {
       userName.value = localStorage.getItem("userName");
 
       await GetUserInfo();
+
+      userImage.value = "@/assets/user1.jpg";
     });
 
     return {

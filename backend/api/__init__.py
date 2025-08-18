@@ -6,3 +6,4 @@ from . import login
 from . import user
 from . import like
 from . import cart
+from . import review
