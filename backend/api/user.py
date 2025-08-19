@@ -2,6 +2,9 @@ from flask import request, jsonify
 from . import api_bp
 from database import db
 from model.user import User
+import os
+import uuid
+from werkzeug.utils import secure_filename
 
 @api_bp.route('/user', methods=['POST'])
 def user():
@@ -41,3 +44,18 @@ def modify():
     db.session.commit()
 
     return jsonify({"email": email, "title": title, "value": value})
+
+@api_bp.route('/upload', methods=['POST'])
+def upload():
+    image = request.files.get('image')  # 圖片檔案
+    title = request.form.get('title') 
+
+    original_name = secure_filename(image.filename)  # 安全處理原始檔名
+    ext = os.path.splitext(original_name)[1]        # 取得副檔名 (.jpg, .png...)
+
+    # 建立新檔名：UUID + 副檔名
+    new_filename = f"{title}{ext}"
+    save_path = os.path.join("src/assets/users", new_filename)
+
+    image.save(save_path)
+    return jsonify({"message": "上傳成功"})

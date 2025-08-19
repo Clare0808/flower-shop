@@ -6,7 +6,16 @@
     </div>
     <div class="container">
       <div class="img-flame">
-        <img src="@/assets/user1.jpg" />
+        <img :src="HandleImage" />
+        <i class="fa-solid fa-pencil" id="img-pen" @click="TriggleFileInput">
+          <input
+            type="file"
+            accept="image/*"
+            @change="UploadImage"
+            ref="fileInput"
+            style="display: none"
+          />
+        </i>
       </div>
       <div class="text-flame">
         <div v-for="(d, index) in userData" :key="index">
@@ -35,14 +44,14 @@
 </template>
 
 <script>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
 import { useRouter } from "vue-router";
 import { userMail, userName, loginStatus } from "@/components/LoginPage.vue";
 import ModifyPage from "@/components/ModifyPage.vue";
 
 export const penClick = ref(false);
 export const modifyData = ref({});
-export const userImage = ref("");
+export const userImage = ref("@/assets/users/user.jpg");
 
 export default {
   name: "UserPage",
@@ -52,6 +61,7 @@ export default {
   setup() {
     const router = useRouter();
     const userData = ref([]);
+    const fileInput = ref(null);
 
     const ClickBtn = () => {
       loginStatus.value = false;
@@ -111,9 +121,42 @@ export default {
       ];
     };
 
+    const UploadImage = async (event) => {
+      const file = event.target.files[0];
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        userImage.value = reader.result;
+      };
+      reader.readAsDataURL(file);
+
+      const formData = new FormData();
+      formData.append("image", file);
+      formData.append("title", userMail.value);
+
+      await fetch("http://localhost:5000/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      userImage.value = `@/assets/users/${userMail.value}.jpg`;
+    };
+
+    const TriggleFileInput = () => {
+      fileInput.value.click();
+    };
+
     watch(penClick);
     watch(modifyData, async (newValue) => {
       userData.value[newValue.index].content = newValue.content;
+    });
+
+    const HandleImage = computed(() => {
+      try {
+        return require(`@/assets/users/${userMail.value}.jpg`);
+      } catch (e) {
+        return require("@/assets/users/user.jpg");
+      }
     });
 
     onMounted(async () => {
@@ -121,8 +164,6 @@ export default {
       userName.value = localStorage.getItem("userName");
 
       await GetUserInfo();
-
-      userImage.value = "@/assets/user1.jpg";
     });
 
     return {
@@ -132,9 +173,14 @@ export default {
       penClick,
       modifyData,
       userData,
+      userImage,
+      fileInput,
       ClickBtn,
       ModifyInfo,
       GetUserInfo,
+      UploadImage,
+      TriggleFileInput,
+      HandleImage,
     };
   },
 };
@@ -170,11 +216,28 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 img {
-  width: 300px;
-  height: 300px;
+  width: 80%;
   box-shadow: 0px 0px 5px 3px #d0d0d0;
+}
+#img-pen {
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  background-color: #ffffff;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 3%;
+  right: 13%;
+  z-index: 2;
+}
+#img-pen:hover {
+  color: #ffffff;
+  background-color: #ff79bc;
+  cursor: pointer;
 }
 .info {
   position: relative;
