@@ -4,18 +4,24 @@
       Write
       <span style="color: #ff79bc">Review</span>
     </div>
+    <div class="error" v-if="showError">{{ errorMsg }}</div>
     <div class="container">
       <div class="flame">
         <div class="sec-title">Give us some star !</div>
         <div class="i-flame">
           <div v-for="i in 5" :key="i">
-            <i class="fa-solid fa-star" @click="HandleStar(i)"></i>
+            <i
+              class="fa-solid fa-star"
+              @click="HandleStarNum(i)"
+              @mouseenter="HandleStarNum(i)"
+              :class="{ iClick: star[i - 1] }"
+            ></i>
           </div>
         </div>
       </div>
       <div class="flame">
         <div class="sec-title">Write down your review.</div>
-        <input type="text" v-model.trim="content" />
+        <textarea type="text" v-model.trim="content"></textarea>
       </div>
       <div class="btn-flame">
         <div class="no-btn" @click="ClosePage">Cancel</div>
@@ -37,14 +43,29 @@ export default {
     const content = ref("");
     const starNum = ref(0);
     const reviewDate = ref("");
+    const star = ref(Array(5).fill(false));
+    const errorMsg = ref("");
+    const showError = ref(false);
 
     const ClosePage = () => {
       showWrite.value = false;
       console.log(userImage.value);
     };
 
-    const HandleStar = (index) => {
+    const HandleStarNum = (index) => {
       starNum.value = index;
+
+      HandleStarLight(index);
+    };
+
+    const HandleStarLight = (index) => {
+      for (let i = 0; i < 5; i++) {
+        star.value[i] = false;
+      }
+
+      for (let i = 0; i < index; i++) {
+        star.value[i] = true;
+      }
     };
 
     const HandleDate = () => {
@@ -60,25 +81,45 @@ export default {
     const SendReview = async () => {
       HandleDate();
 
-      const response = await fetch("http://localhost:5000/api/storereview", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: userName.value,
-          img: userImage.value,
-          date: reviewDate.value,
-          score: starNum.value,
-          content: content.value,
-        }),
-      });
+      CheckContent();
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
+      if (!showError.value) {
+        const response = await fetch("http://localhost:5000/api/storereview", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: userName.value,
+            img: userImage.value,
+            date: reviewDate.value,
+            score: starNum.value,
+            content: content.value,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        ClosePage();
+      }
+    };
+
+    const CheckContent = () => {
+      if (starNum.value === 0) {
+        errorMsg.value = "Please give us some star !";
+        showError.value = true;
+      } else if (content.value === "") {
+        errorMsg.value = "Please write something !";
+        showError.value = true;
+      } else {
+        showError.value = false;
       }
 
-      ClosePage();
+      setTimeout(() => {
+        showError.value = false;
+      }, 2000);
     };
 
     return {
@@ -88,10 +129,15 @@ export default {
       content,
       starNum,
       reviewDate,
+      star,
+      errorMsg,
+      showError,
       ClosePage,
-      HandleStar,
+      HandleStarNum,
+      HandleStarLight,
       HandleDate,
       SendReview,
+      CheckContent,
     };
   },
 };
@@ -112,6 +158,16 @@ export default {
   background-color: #ffd9ec;
   width: 90%;
   padding: 2px;
+}
+.error {
+  position: absolute;
+  right: 5%;
+  top: 80px;
+  background-color: #ffb5b5;
+  color: #ff2d2d;
+  padding: 20px;
+  text-align: center;
+  font-size: 18px;
 }
 .container {
   width: 90%;
@@ -140,14 +196,19 @@ i:hover {
   color: #ff79bc;
   cursor: pointer;
 }
-input {
-  width: 100%;
+.iClick {
+  color: #ff79bc;
+  cursor: pointer;
+}
+textarea {
+  width: calc(100% - 20px);
   margin-top: 10px;
   height: 150px;
+  padding: 10px;
   border-radius: 10px;
   border: 1px solid #adadad;
 }
-input:focus {
+textarea:focus {
   outline: none;
   border: 1px solid #ff79bc;
 }
