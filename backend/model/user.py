@@ -8,6 +8,7 @@ class User(db.Model):
     email = db.Column(db.Text, nullable=False)
     birthday = db.Column(db.Text, nullable=False)
     number = db.Column(db.Text, nullable=False)
+    img = db.Column(db.Text, nullable=False)
 
     def __repr__(self):
         return f'<User {self.user_id}>'

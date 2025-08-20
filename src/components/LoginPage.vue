@@ -48,6 +48,7 @@ import { useRouter } from "vue-router";
 
 export const userMail = ref("");
 export const userName = ref("");
+export const userImage = ref("");
 export const loginStatus = ref(false);
 
 export default {
@@ -117,6 +118,7 @@ export default {
             email: email.value,
             birthday: "None",
             number: "None",
+            img: require("@/assets/users/user.jpg"),
           }),
         });
 

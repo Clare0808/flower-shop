@@ -14,19 +14,20 @@ def user():
     email = data.get('email')
     birthday = data.get('birthday')
     number = data.get('number')
+    img = data.get('img')
 
-    user = User(name=name, email=email, birthday=birthday, number=number)
+    user = User(name=name, email=email, birthday=birthday, number=number, img=img)
 
     db.session.add(user)
     db.session.commit()
 
-    return jsonify({"name": name, "email": email, "birthday": birthday, "number": number}), 202
+    return jsonify({"name": name, "email": email, "birthday": birthday, "number": number, "img": img}), 202
 
 @api_bp.route('/info', methods=['GET'])
 def info():
     infos = User.query.all()
 
-    data_list = [{"name": info.name, "email": info.email, "birthday": info.birthday, "number": info.number} for info in infos]
+    data_list = [{"name": info.name, "email": info.email, "birthday": info.birthday, "number": info.number, "img": info.img} for info in infos]
 
     return jsonify({"data": data_list}), 203
 
@@ -55,7 +56,7 @@ def upload():
 
     # 建立新檔名：UUID + 副檔名
     new_filename = f"{title}{ext}"
-    save_path = os.path.join("src/assets/users", new_filename)
+    save_path = os.path.join("public/assets/users", new_filename)
 
     image.save(save_path)
-    return jsonify({"message": "上傳成功"})
+    return jsonify({"newName": new_filename})

@@ -6,7 +6,7 @@
     </div>
     <div class="container">
       <div class="img-flame">
-        <img :src="HandleImage" />
+        <img :src="userImage" />
         <i class="fa-solid fa-pencil" id="img-pen" @click="TriggleFileInput">
           <input
             type="file"
@@ -44,14 +44,14 @@
 </template>
 
 <script>
-import { ref, onMounted, watch, computed } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
 import { userMail, userName, loginStatus } from "@/components/LoginPage.vue";
 import ModifyPage from "@/components/ModifyPage.vue";
 
 export const penClick = ref(false);
 export const modifyData = ref({});
-export const userImage = ref("@/assets/users/user.jpg");
+export const userImage = ref("");
 
 export default {
   name: "UserPage",
@@ -91,7 +91,6 @@ export default {
       const filterData = data.data.find(
         (item) => item.email === userMail.value
       );
-      console.log(filterData, userMail.value);
 
       userData.value = [
         {
@@ -119,6 +118,8 @@ export default {
           content: filterData.number,
         },
       ];
+
+      userImage.value = `/assets/users/${filterData.img}`;
     };
 
     const UploadImage = async (event) => {
@@ -134,12 +135,30 @@ export default {
       formData.append("image", file);
       formData.append("title", userMail.value);
 
-      await fetch("http://localhost:5000/api/upload", {
+      const response = await fetch("http://localhost:5000/api/upload", {
         method: "POST",
         body: formData,
       });
 
-      userImage.value = `@/assets/users/${userMail.value}.jpg`;
+      const result = await response.json(); // ✅ 解析 JSON
+      console.log("re", result.newName);
+
+      const responseModify = await fetch("http://localhost:5000/api/modify", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: userMail.value,
+          title: "img",
+          value: result.newName,
+        }),
+      });
+
+      const resultM = await responseModify.json();
+      console.log("m", resultM);
+
+      userImage.value = `/assets/users/${result.newName}`;
     };
 
     const TriggleFileInput = () => {
@@ -151,13 +170,13 @@ export default {
       userData.value[newValue.index].content = newValue.content;
     });
 
-    const HandleImage = computed(() => {
+    /*const HandleImage = computed(() => {
       try {
         return require(`@/assets/users/${userMail.value}.jpg`);
       } catch (e) {
         return require("@/assets/users/user.jpg");
       }
-    });
+    });*/
 
     onMounted(async () => {
       userMail.value = localStorage.getItem("userMail");
@@ -180,7 +199,7 @@ export default {
       GetUserInfo,
       UploadImage,
       TriggleFileInput,
-      HandleImage,
+      // HandleImage,
     };
   },
 };

@@ -5,6 +5,7 @@
       <span style="color: #ff79bc">Review</span>
     </div>
     <div class="error" v-if="showError">{{ errorMsg }}</div>
+    <div class="success" v-if="showSuccess">{{ successMsg }}</div>
     <div class="container">
       <div class="flame">
         <div class="sec-title">Give us some star !</div>
@@ -33,6 +34,7 @@
 
 <script>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 import { showWrite } from "@/components/ReviewPage.vue";
 import { userName } from "@/components/LoginPage.vue";
 import { userImage } from "@/components/UserPage.vue";
@@ -46,6 +48,9 @@ export default {
     const star = ref(Array(5).fill(false));
     const errorMsg = ref("");
     const showError = ref(false);
+    const router = useRouter();
+    const showSuccess = ref(false);
+    const successMsg = ref("");
 
     const ClosePage = () => {
       showWrite.value = false;
@@ -102,7 +107,13 @@ export default {
           throw new Error("Network response was not ok");
         }
 
-        ClosePage();
+        successMsg.value = "Add review successfully !";
+        showSuccess.value = true;
+
+        setTimeout(() => {
+          ClosePage();
+          router.go(0);
+        }, 1000);
       }
     };
 
@@ -132,6 +143,8 @@ export default {
       star,
       errorMsg,
       showError,
+      showSuccess,
+      successMsg,
       ClosePage,
       HandleStarNum,
       HandleStarLight,
@@ -165,6 +178,16 @@ export default {
   top: 80px;
   background-color: #ffb5b5;
   color: #ff2d2d;
+  padding: 20px;
+  text-align: center;
+  font-size: 18px;
+}
+.success {
+  position: absolute;
+  right: 5%;
+  top: 80px;
+  background-color: #a6ffa6;
+  color: #00db00;
   padding: 20px;
   text-align: center;
   font-size: 18px;

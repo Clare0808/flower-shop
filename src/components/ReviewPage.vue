@@ -29,10 +29,8 @@
 
 <script>
 import { ref, watch, onMounted } from "vue";
-// import { useRouter } from "vue-router";
 import WriteReviewPage from "@/components/WriteReviewPage.vue";
-import { userImage } from "@/components/UserPage.vue";
-import { userMail } from "@/components/LoginPage.vue";
+import { userMail, userImage } from "@/components/LoginPage.vue";
 
 export const showWrite = ref(false);
 
@@ -43,7 +41,6 @@ export default {
   },
   setup() {
     const reviewData = ref([]);
-    // const route = useRouter();
 
     const ShowWritePage = () => {
       showWrite.value = true;
@@ -56,14 +53,6 @@ export default {
       reviewData.value = data.data;
       console.log(reviewData.value);
     };
-
-    /*const HandleImage = computed(() => {
-      try {
-        return require(`@/assets/users/${userMail.value}.jpg`);
-      } catch (e) {
-        return require("@/assets/users/user.jpg");
-      }
-    });*/
 
     watch(showWrite);
     watch(reviewData);
@@ -79,7 +68,6 @@ export default {
       showWrite,
       ShowWritePage,
       GetReviewData,
-      // HandleImage,
     };
   },
 };
