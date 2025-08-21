@@ -62,6 +62,7 @@ export default {
     const router = useRouter();
     const userData = ref([]);
     const fileInput = ref(null);
+    const userImage = ref("");
 
     const ClickBtn = () => {
       loginStatus.value = false;

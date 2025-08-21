@@ -118,7 +118,7 @@ export default {
             email: email.value,
             birthday: "None",
             number: "None",
-            img: require("@/assets/users/user.jpg"),
+            img: "user.jpg",
           }),
         });
 

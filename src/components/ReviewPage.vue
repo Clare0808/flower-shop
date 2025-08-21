@@ -30,7 +30,7 @@
 <script>
 import { ref, watch, onMounted } from "vue";
 import WriteReviewPage from "@/components/WriteReviewPage.vue";
-import { userMail, userImage } from "@/components/LoginPage.vue";
+import { userMail } from "@/components/LoginPage.vue";
 
 export const showWrite = ref(false);
 
@@ -62,7 +62,6 @@ export default {
     });
 
     return {
-      userImage,
       userMail,
       reviewData,
       showWrite,

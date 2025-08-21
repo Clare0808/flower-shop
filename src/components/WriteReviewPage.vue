@@ -36,8 +36,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { showWrite } from "@/components/ReviewPage.vue";
-import { userName } from "@/components/LoginPage.vue";
-import { userImage } from "@/components/UserPage.vue";
+import { userMail, userName } from "@/components/LoginPage.vue";
 
 export default {
   name: "CartPage",
@@ -51,10 +50,10 @@ export default {
     const router = useRouter();
     const showSuccess = ref(false);
     const successMsg = ref("");
+    const userImage = ref("");
 
     const ClosePage = () => {
       showWrite.value = false;
-      console.log(userImage.value);
     };
 
     const HandleStarNum = (index) => {
@@ -87,6 +86,8 @@ export default {
       HandleDate();
 
       CheckContent();
+
+      await GetUserImage();
 
       if (!showError.value) {
         const response = await fetch("http://localhost:5000/api/storereview", {
@@ -133,9 +134,20 @@ export default {
       }, 2000);
     };
 
+    const GetUserImage = async () => {
+      const response = await fetch("http://localhost:5000/api/info");
+      const data = await response.json();
+
+      const filterData = data.data.find(
+        (item) => item.email === userMail.value
+      );
+
+      userImage.value = `/assets/users/${filterData.img}`;
+    };
+
     return {
+      userMail,
       userName,
-      userImage,
       showWrite,
       content,
       starNum,
@@ -145,12 +157,14 @@ export default {
       showError,
       showSuccess,
       successMsg,
+      userImage,
       ClosePage,
       HandleStarNum,
       HandleStarLight,
       HandleDate,
       SendReview,
       CheckContent,
+      GetUserImage,
     };
   },
 };
