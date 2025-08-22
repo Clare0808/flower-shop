@@ -33,9 +33,12 @@
           </div>
         </div>
       </div>
-      <div class="btn" @click="ClickBtn">
-        Logout
-        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+      <div class="btn-flame">
+        <div class="manage-btn" @click="ClickManage">Manage</div>
+        <div class="btn" @click="ClickBtn">
+          Logout
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        </div>
       </div>
     </div>
 
@@ -52,6 +55,7 @@ import ModifyPage from "@/components/ModifyPage.vue";
 export const penClick = ref(false);
 export const modifyData = ref({});
 export const userImage = ref("");
+export const showNav = ref(true);
 
 export default {
   name: "UserPage",
@@ -71,6 +75,11 @@ export default {
       localStorage.removeItem("userName");
 
       router.push("/login");
+    };
+
+    const ClickManage = () => {
+      router.push("/back");
+      showNav.value = false;
     };
 
     const ModifyInfo = (index) => {
@@ -196,6 +205,7 @@ export default {
       userImage,
       fileInput,
       ClickBtn,
+      ClickManage,
       ModifyInfo,
       GetUserInfo,
       UploadImage,
@@ -293,6 +303,29 @@ img {
   text-align: center;
   margin-top: 20px;
 }
+.btn-flame {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  right: 70px;
+  bottom: -15px;
+}
+.manage-btn {
+  width: 100px;
+  height: 25px;
+  background-color: #ffd9ec;
+  color: #ff79bc;
+  text-align: center;
+  line-height: 25px;
+  padding: 5px;
+  border-radius: 10px;
+  margin: 0 20px;
+}
+.manage-btn:hover {
+  background-color: #ff79bc;
+  color: #ffffff;
+  cursor: pointer;
+}
 .btn {
   width: 100px;
   height: 25px;
@@ -302,9 +335,6 @@ img {
   line-height: 25px;
   padding: 5px;
   border-radius: 10px;
-  position: absolute;
-  right: 70px;
-  bottom: -15px;
 }
 .btn:hover {
   background-color: #ff79bc;

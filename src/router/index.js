@@ -7,6 +7,8 @@ import UserPage from "@/components/UserPage.vue";
 import CartPage from "@/components/CartPage.vue";
 import LikePage from "@/components/LikePage.vue";
 import LoginPage from "@/components/LoginPage.vue";
+import BackPage from "@/components/BackPage.vue";
+import ListPage from "@/components/ListPage.vue";
 
 const routes = [
   {
@@ -57,6 +59,18 @@ const routes = [
     path: "/login",
     name: "LoginPage",
     component: LoginPage,
+  },
+  {
+    path: "/back",
+    name: "BackPage",
+    component: BackPage,
+    children: [
+      {
+        path: "/list",
+        name: "ListPage",
+        component: ListPage,
+      },
+    ],
   },
 ];
 

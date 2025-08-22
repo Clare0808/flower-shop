@@ -1,5 +1,5 @@
 <template>
-  <nav>
+  <nav v-if="showNav">
     <div class="mark">
       <i class="fa-solid fa-seedling"></i>
       Flower
@@ -29,6 +29,7 @@
 <script>
 import { onMounted } from "vue";
 import { userMail, userName, loginStatus } from "@/components/LoginPage.vue";
+import { showNav } from "@/components/UserPage.vue";
 
 export default {
   setup() {
@@ -50,6 +51,7 @@ export default {
       userMail,
       userName,
       loginStatus,
+      showNav,
     };
   },
 };
