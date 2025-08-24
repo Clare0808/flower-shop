@@ -1,14 +1,16 @@
 <template>
   <div class="list-page">
     <div class="title">Products List</div>
-    <div class="flame">
-      <div class="list">
-        <img src="@/assets/product1.jpg" />
-        <div class="text">User 1</div>
-        <div class="text">Product 1</div>
-        <div class="text">x3</div>
-        <div class="text">$12.99</div>
-        <div class="total">$37.99</div>
+    <div class="container">
+      <div class="flame" v-for="i in 10" :key="i">
+        <div class="list">
+          <img src="@/assets/product1.jpg" />
+          <div class="text">User 1</div>
+          <div class="text">Product 1</div>
+          <div class="text">x3</div>
+          <div class="text">$12.99</div>
+          <div class="total">$37.99</div>
+        </div>
       </div>
     </div>
   </div>
@@ -27,6 +29,10 @@
   padding-bottom: 10px;
   margin-bottom: 10px;
   border-bottom: 2px solid #ff79bc;
+}
+.container {
+  max-height: 92%;
+  overflow-y: auto;
 }
 .flame {
   display: flex;

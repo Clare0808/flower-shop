@@ -79,7 +79,9 @@ export default {
 
     const ClickManage = () => {
       router.push("/back");
+
       showNav.value = false;
+      localStorage.setItem("showNav", showNav.value);
     };
 
     const ModifyInfo = (index) => {

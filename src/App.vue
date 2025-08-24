@@ -27,12 +27,25 @@
 </template>
 
 <script>
-import { onMounted } from "vue";
+import { onMounted, computed, watch } from "vue";
+import { useRoute } from "vue-router";
 import { userMail, userName, loginStatus } from "@/components/LoginPage.vue";
 import { showNav } from "@/components/UserPage.vue";
 
 export default {
   setup() {
+    const route = useRoute();
+
+    const isBackPage = computed(() => route.path.includes("back"));
+
+    watch(isBackPage, (newValue) => {
+      if (newValue) {
+        showNav.value = false;
+      } else {
+        showNav.value = true;
+      }
+    });
+
     onMounted(() => {
       const storeMail = localStorage.getItem("userMail");
       const storeName = localStorage.getItem("userName");

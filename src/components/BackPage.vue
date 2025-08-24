@@ -1,11 +1,15 @@
 <template>
   <div class="back-page">
     <div class="menu">
-      <router-link to="/list">
+      <router-link to="/backlist">
         <i class="fa-solid fa-file"></i>
       </router-link>
-      <i class="fa-solid fa-thumbs-up"></i>
-      <i class="fa-solid fa-comment"></i>
+      <router-link to="/backreview">
+        <i class="fa-solid fa-thumbs-up"></i>
+      </router-link>
+      <router-link to="/backcomment">
+        <i class="fa-solid fa-comment"></i>
+      </router-link>
       <i class="fa-solid fa-arrow-left" id="arrow" @click="ClickArrow"></i>
     </div>
     <div class="son-page">
@@ -15,15 +19,26 @@
 </template>
 
 <script>
-//import BackMenuPage from "@/components/BackMenuPage.vue";
-//import ListPage from "@/components/ListPage.vue";
+import { useRouter } from "vue-router";
+import { showNav } from "@/components/UserPage.vue";
 
 export default {
   name: "BackPage",
-  /*components: {
-    BackMenuPage,
-    ListPage,
-  },*/
+  setup() {
+    const router = useRouter();
+
+    const ClickArrow = () => {
+      router.push("/user");
+
+      showNav.value = true;
+      localStorage.setItem("showNav", showNav.value);
+    };
+
+    return {
+      showNav,
+      ClickArrow,
+    };
+  },
 };
 </script>
 
