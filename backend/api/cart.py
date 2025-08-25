@@ -28,3 +28,19 @@ def getcart():
     data_list = [{"email": info.email, "name": info.name, "price": info.price, "img": info.img, "quantity": info.quantity, "total": info.total} for info in infos]
 
     return jsonify({"data": data_list}), 200
+
+@api_bp.route("/deletecart", methods=["POST"])
+def deletecart():
+    data = request.get_json()
+
+    name = data.get("name")
+    quantity = data.get("quantity")
+
+    cart = Cart.query.filter_by(name=name, quantity=quantity).first()
+
+    if cart: 
+        db.session.delete(cart)
+        db.session.commit()
+        return jsonify({"message": "刪除成功"}), 200
+    else:
+        return jsonify({"error": "找不到指定的 Cart"}), 404

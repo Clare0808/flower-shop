@@ -11,6 +11,7 @@ import BackPage from "@/components/BackPage.vue";
 import BackListPage from "@/components/BackListPage.vue";
 import BackReviewPage from "@/components/BackReviewPage.vue";
 import BackCommentPage from "@/components/BackCommentPage.vue";
+import BackChartPage from "@/components/BackChartPage.vue";
 
 const routes = [
   {
@@ -81,6 +82,11 @@ const routes = [
         path: "/backcomment",
         name: "BackCommentPage",
         component: BackCommentPage,
+      },
+      {
+        path: "/backchart",
+        name: "BackChartPage",
+        component: BackChartPage,
       },
     ],
   },

@@ -2,13 +2,32 @@
   <div class="back-page">
     <div class="menu">
       <router-link to="/backlist">
-        <i class="fa-solid fa-file"></i>
+        <i
+          class="fa-solid fa-file"
+          @click="ClickPotion(0)"
+          :class="{ active: btnClicked[0] }"
+        ></i>
       </router-link>
       <router-link to="/backreview">
-        <i class="fa-solid fa-thumbs-up"></i>
+        <i
+          class="fa-solid fa-thumbs-up"
+          @click="ClickPotion(1)"
+          :class="{ active: btnClicked[1] }"
+        ></i>
+      </router-link>
+      <router-link to="/backchart">
+        <i
+          class="fa-solid fa-chart-line"
+          @click="ClickPotion(2)"
+          :class="{ active: btnClicked[2] }"
+        ></i>
       </router-link>
       <router-link to="/backcomment">
-        <i class="fa-solid fa-comment"></i>
+        <i
+          class="fa-solid fa-comment"
+          @click="ClickPotion(3)"
+          :class="{ active: btnClicked[3] }"
+        ></i>
       </router-link>
       <i class="fa-solid fa-arrow-left" id="arrow" @click="ClickArrow"></i>
     </div>
@@ -19,6 +38,7 @@
 </template>
 
 <script>
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { showNav } from "@/components/UserPage.vue";
 
@@ -26,6 +46,7 @@ export default {
   name: "BackPage",
   setup() {
     const router = useRouter();
+    const btnClicked = ref(Array(4).fill(false));
 
     const ClickArrow = () => {
       router.push("/user");
@@ -34,9 +55,19 @@ export default {
       localStorage.setItem("showNav", showNav.value);
     };
 
+    const ClickPotion = (index) => {
+      for (let i = 0; i < btnClicked.value.length; i++) {
+        btnClicked.value[i] = false;
+      }
+
+      btnClicked.value[index] = true;
+    };
+
     return {
       showNav,
+      btnClicked,
       ClickArrow,
+      ClickPotion,
     };
   },
 };
@@ -69,6 +100,9 @@ i {
   margin: 10px 0;
 }
 i:hover {
+  color: #ff79bc;
+}
+.active {
   color: #ff79bc;
 }
 #arrow {

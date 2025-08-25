@@ -88,6 +88,7 @@ export default {
       CheckContent();
 
       await GetUserImage();
+      await GetUserName();
 
       if (!showError.value) {
         const response = await fetch("http://localhost:5000/api/storereview", {
@@ -145,6 +146,17 @@ export default {
       userImage.value = `/assets/users/${filterData.img}`;
     };
 
+    const GetUserName = async () => {
+      const response = await fetch("http://localhost:5000/api/info");
+      const data = await response.json();
+
+      const filterData = data.data.find(
+        (item) => item.email === userMail.value
+      );
+
+      userName.value = filterData.name;
+    };
+
     return {
       userMail,
       userName,
@@ -165,6 +177,7 @@ export default {
       SendReview,
       CheckContent,
       GetUserImage,
+      GetUserName,
     };
   },
 };

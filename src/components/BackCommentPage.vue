@@ -2,22 +2,44 @@
   <div class="comment-page">
     <div class="title">Customers Review</div>
     <div class="container">
-      <div class="flame" v-for="i in 10" :key="i">
+      <div class="flame" v-for="(c, index) in commentData" :key="index">
         <div class="comment">
-          <div class="text">User 1</div>
-          <div class="text">2023/08/08</div>
-          <div class="text">1223456@gmail.com</div>
-          <div class="text">0912345678</div>
-          <div class="text-de">
-            Rose, Tulip, are native to Central Asia, Carnation, Known to
-            symbolise love and deep fascination, Lily, Daisy, a great symbol of
-            happiness, Camellia, symbolise love and affection...
-          </div>
+          <div class="text">{{ c.name }}</div>
+          <div class="text">{{ c.date }}</div>
+          <div class="text">{{ c.email }}</div>
+          <div class="text">{{ c.number }}</div>
+          <div class="text-de">{{ c.content }}</div>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<script>
+import { ref, onMounted } from "vue";
+
+export default {
+  setup() {
+    const commentData = ref([]);
+
+    const GetCommentData = async () => {
+      const response = await fetch("http://localhost:5000/api/getcomment");
+      const data = await response.json();
+
+      commentData.value = data.data;
+    };
+
+    onMounted(() => {
+      GetCommentData();
+    });
+
+    return {
+      commentData,
+      GetCommentData,
+    };
+  },
+};
+</script>
 
 <style scoped>
 .comment-page {
@@ -45,7 +67,10 @@
 .comment {
   width: 95%;
   margin: 10px 0;
-  display: flex;
+  text-align: left;
+  display: grid;
+  grid-template-columns: 10% 15% 25% 15% 30%;
+  gap: 10px;
   justify-content: space-between;
   align-items: center;
 }
@@ -56,6 +81,5 @@
   font-size: 18px;
   color: #adadad;
   text-align: left;
-  width: 40%;
 }
 </style>

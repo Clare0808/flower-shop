@@ -70,7 +70,9 @@ export default {
 .review {
   width: 95%;
   margin: 10px 0;
-  display: flex;
+  display: grid;
+  grid-template-columns: 10% 15% 15% 55%;
+  gap: 10px;
   justify-content: space-between;
   align-items: center;
 }
@@ -78,7 +80,6 @@ export default {
   font-size: 22px;
 }
 .star-flame {
-  width: 10%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -90,6 +91,5 @@ i {
   font-size: 18px;
   color: #adadad;
   text-align: left;
-  width: 60%;
 }
 </style>

@@ -2,19 +2,45 @@
   <div class="list-page">
     <div class="title">Products List</div>
     <div class="container">
-      <div class="flame" v-for="i in 10" :key="i">
+      <div class="flame" v-for="(l, index) in listData" :key="index">
         <div class="list">
-          <img src="@/assets/product1.jpg" />
-          <div class="text">User 1</div>
-          <div class="text">Product 1</div>
-          <div class="text">x3</div>
-          <div class="text">$12.99</div>
-          <div class="total">$37.99</div>
+          <img :src="l.img" />
+          <div class="text">{{ l.email }}</div>
+          <div class="text">{{ l.product }}</div>
+          <div class="text">x{{ l.quantity }}</div>
+          <div class="text-p">${{ l.price }}</div>
+          <div class="total">${{ l.total }}</div>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<script>
+import { ref, onMounted } from "vue";
+
+export default {
+  setup() {
+    const listData = ref([]);
+
+    const GetListData = async () => {
+      const response = await fetch("http://localhost:5000/api/getbuy");
+      const data = await response.json();
+
+      listData.value = data.data;
+    };
+
+    onMounted(() => {
+      GetListData();
+    });
+
+    return {
+      listData,
+      GetListData,
+    };
+  },
+};
+</script>
 
 <style scoped>
 .list-page {
@@ -51,6 +77,10 @@ img {
   height: 80px;
 }
 .text {
+  font-size: 24px;
+}
+.text-p {
+  width: 10%;
   font-size: 24px;
 }
 .total {

@@ -28,7 +28,7 @@
 <script>
 import { ref, watch } from "vue";
 import { penClick, modifyData } from "@/components/UserPage.vue";
-import { userMail } from "@/components/LoginPage.vue";
+import { userMail, userName } from "@/components/LoginPage.vue";
 import { useRouter } from "vue-router";
 
 export default {
@@ -75,6 +75,8 @@ export default {
 
         const result = await responseLogin.json();
         console.log("更新結果：", result);
+
+        userName.value = modifyData.value.content;
       }
 
       const result = await responseUser.json();
@@ -96,6 +98,7 @@ export default {
       penClick,
       modifyData,
       userMail,
+      userName,
       inputInfo,
       showSuccess,
       successMsg,

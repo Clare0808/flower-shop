@@ -7,3 +7,5 @@ from . import user
 from . import like
 from . import cart
 from . import review
+from . import buy
+from . import comment
