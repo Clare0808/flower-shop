@@ -6,6 +6,7 @@
         <div class="list">
           <img :src="l.img" />
           <div class="text">{{ l.email }}</div>
+          <div class="text">{{ l.date }}</div>
           <div class="text">{{ l.product }}</div>
           <div class="text">x{{ l.quantity }}</div>
           <div class="text-p">${{ l.price }}</div>
@@ -28,6 +29,7 @@ export default {
       const data = await response.json();
 
       listData.value = data.data;
+      console.log(listData.value);
     };
 
     onMounted(() => {
@@ -68,7 +70,9 @@ export default {
 .list {
   width: 95%;
   margin: 10px 0;
-  display: flex;
+  display: grid;
+  grid-template-columns: 8% 30% 15% 15% 5% 8% 10%;
+  gap: 10px;
   justify-content: space-between;
   align-items: center;
 }

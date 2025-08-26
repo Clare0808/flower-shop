@@ -10,6 +10,7 @@ class Buy(db.Model):
     img = db.Column(db.Text, nullable=False)
     quantity = db.Column(db.Text, nullable=False)
     total = db.Column(db.Text, nullable=False)
+    date = db.Column(db.Text, nullable=False)
 
     def __repr__(self):
         return f'<Buy {self.buy_id}>'

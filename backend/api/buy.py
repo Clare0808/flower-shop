@@ -13,18 +13,19 @@ def storebuy():
     img = data.get("img")
     quantity = data.get("quantity")
     total = data.get("total")
+    date = data.get("date")
 
-    buy = Buy(email=email, product=product, price=price, img=img, quantity=quantity, total=total)
+    buy = Buy(email=email, product=product, price=price, img=img, quantity=quantity, total=total, date=date)
 
     db.session.add(buy)
     db.session.commit()
 
-    return jsonify({"email": email, "product": product, "price": price, "img": img, "quantity": quantity, "total": total})
+    return jsonify({"email": email, "product": product, "price": price, "img": img, "quantity": quantity, "total": total, "date": date})
 
 @api_bp.route("/getbuy", methods=["GET"])
 def getbuy():
     infos = Buy.query.all()
 
-    data_list = [{"email": info.email, "product": info.product, "price": info.price, "img": info.img, "quantity": info.quantity, "total": info.total} for info in infos]
+    data_list = [{"email": info.email, "product": info.product, "price": info.price, "img": info.img, "quantity": info.quantity, "total": info.total, "date": info.date} for info in infos]
 
     return jsonify({"data": data_list}), 200

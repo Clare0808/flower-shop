@@ -7,20 +7,28 @@
     <div class="success" v-if="showSuccess">{{ successMsg }}</div>
     <div class="container">
       <div class="input-flame">
-        <input
+        <textarea
           class="input-name"
           type="text"
           placeholder="Name"
           v-model.trim="name"
-        />
-        <input type="text" placeholder="Email" v-model.trim="email" />
-        <input type="number" placeholder="Number" v-model.trim="number" />
-        <input
+        ></textarea>
+        <textarea
+          type="text"
+          placeholder="Email"
+          v-model.trim="email"
+        ></textarea>
+        <textarea
+          type="text"
+          placeholder="Number"
+          v-model.trim="number"
+        ></textarea>
+        <textarea
           class="input-msg"
           type="text"
           placeholder="Message"
           v-model.trim="msg"
-        />
+        ></textarea>
         <div class="btn" @click="SendComment">Send Message</div>
       </div>
       <img src="@/assets/contact.jpg" />
@@ -144,9 +152,10 @@ export default {
   justify-content: center;
   align-items: center;
 }
-input {
-  width: 90%;
-  height: 25px;
+textarea {
+  width: 85%;
+  height: 15px;
+  padding: 10px;
   border: 1px solid #adadad;
   border-radius: 10px;
   margin: 10px 10px;
@@ -159,8 +168,12 @@ input:focus {
   margin-top: 20px;
 }
 .input-msg {
-  height: 100px;
   margin-bottom: 20px;
+  height: 100px;
+}
+textarea:focus {
+  outline: none;
+  border: 1px solid #ff79bc;
 }
 .btn {
   width: 150px;

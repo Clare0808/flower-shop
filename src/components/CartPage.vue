@@ -39,6 +39,7 @@ export default {
     const cartData = ref([]);
     const showSuccess = ref(false);
     const successMsg = ref("");
+    const buyDate = ref("");
 
     const GetCartData = async () => {
       const response = await fetch("http://localhost:5000/api/getcart");
@@ -54,6 +55,8 @@ export default {
     };
 
     const SendBuy = async (index) => {
+      HandleDate();
+
       const response = await fetch("http://localhost:5000/api/storebuy", {
         method: "POST",
         headers: {
@@ -66,6 +69,7 @@ export default {
           img: cartData.value[index].img,
           quantity: cartData.value[index].quantity,
           total: cartData.value[index].total,
+          date: buyDate.value,
         }),
       });
 
@@ -108,6 +112,16 @@ export default {
       }, 2000);
     };
 
+    const HandleDate = () => {
+      const date = new Date();
+
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+
+      buyDate.value = `${year}-${month}-${day}`;
+    };
+
     onMounted(() => {
       GetCartData();
     });
@@ -117,9 +131,11 @@ export default {
       userMail,
       showSuccess,
       successMsg,
+      buyDate,
       GetCartData,
       SendBuy,
       DeleteCart,
+      HandleDate,
     };
   },
 };
