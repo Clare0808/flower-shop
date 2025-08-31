@@ -321,9 +321,27 @@ i.liked {
 }
 
 .buy-page {
-  width: 40%;
+  width: 50%;
   position: fixed;
   top: 15%;
   z-index: 2;
+}
+
+@media (max-width: 1050px) {
+  .container {
+    grid-template-columns: repeat(2, 45%);
+    grid-template-rows: repeat(3, 450px);
+    gap: 20px;
+  }
+}
+@media (max-width: 650px) {
+  .container {
+    grid-template-columns: 80%;
+    grid-template-rows: repeat(6, 500px);
+    gap: 20px;
+  }
+  .buy-page {
+    width: 70%;
+  }
 }
 </style>

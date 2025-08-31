@@ -1,6 +1,7 @@
 <template>
   <div class="review-page">
     <div class="title">Customers Review</div>
+    <div class="empty" v-if="backReview.length === 0">Nothing here.</div>
     <div class="container">
       <div class="flame" v-for="(r, index) in backReview" :key="index">
         <div class="review">
@@ -57,6 +58,11 @@ export default {
   padding-bottom: 10px;
   margin-bottom: 10px;
   border-bottom: 2px solid #ff79bc;
+}
+.empty {
+  color: #adadad;
+  font-size: 24px;
+  margin-top: 50px;
 }
 .container {
   max-height: 92%;

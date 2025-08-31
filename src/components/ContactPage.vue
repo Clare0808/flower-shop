@@ -194,4 +194,12 @@ img {
   width: 100%;
   border-radius: 20px;
 }
+
+@media (max-width: 1000px) {
+  .container {
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+  }
+}
 </style>

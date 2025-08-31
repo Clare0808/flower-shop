@@ -153,9 +153,23 @@ img {
 }
 
 .write-page {
-  width: 40%;
+  width: 50%;
   position: fixed;
   top: 25%;
   z-index: 2;
+}
+
+@media (max-width: 1050px) {
+  .flame {
+    grid-template-columns: repeat(2, 45%);
+  }
+}
+@media (max-width: 650px) {
+  .flame {
+    grid-template-columns: 80%;
+  }
+  .write-page {
+    width: 70%;
+  }
 }
 </style>

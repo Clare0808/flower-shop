@@ -5,6 +5,9 @@
       <span style="color: #ff79bc">Cart</span>
     </div>
     <div class="success" v-if="showSuccess">{{ successMsg }}</div>
+    <div class="empty" v-if="cartData.length === 0">
+      Add your favorate flower !
+    </div>
     <div class="container">
       <div class="flame" v-for="(c, index) in cartData" :key="index">
         <div class="items-flame">
@@ -166,12 +169,16 @@ export default {
   text-align: center;
   font-size: 18px;
 }
+.empty {
+  color: #adadad;
+  font-size: 24px;
+  margin-top: 50px;
+}
 .container {
   width: 90%;
   padding: 50px;
   display: grid;
   grid-template-columns: 48% 48%;
-  grid-template-rows: repeat(4, 100px);
   gap: 20px;
   justify-content: center;
   align-items: center;
@@ -250,5 +257,35 @@ img {
   color: #ffffff;
   background-color: #ff79bc;
   cursor: pointer;
+}
+
+@media (max-width: 1000px) {
+  .container {
+    grid-template-columns: 80%;
+  }
+}
+@media (max-width: 630px) {
+  .container {
+    grid-template-columns: 90%;
+  }
+  .text-flame {
+    font-size: 16px;
+  }
+  .item-name {
+    font-size: 20px;
+  }
+  .num-flame {
+    font-size: 16px;
+  }
+  .total-price {
+    font-size: 20px;
+  }
+  .buy-btn,
+  .delete {
+    width: 80px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 15px;
+  }
 }
 </style>

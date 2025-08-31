@@ -82,4 +82,27 @@ export default {
   background-color: #ff79bc;
   cursor: pointer;
 }
+
+@media (max-width: 625px) {
+  .container {
+    padding-top: 150px;
+    padding-left: 50px;
+  }
+  .title {
+    font-size: 40px;
+  }
+  .sec-title {
+    font-size: 25px;
+  }
+  .description {
+    width: 300px;
+    font-size: 15px;
+  }
+  .btn {
+    width: 80px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 15px;
+  }
+}
 </style>

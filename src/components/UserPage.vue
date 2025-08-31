@@ -34,7 +34,7 @@
         </div>
       </div>
       <div class="btn-flame">
-        <div class="manage-btn" @click="ClickManage">Manage</div>
+        <div class="manage-btn" @click="ClickManage" v-if="manager">Manage</div>
         <div class="btn" @click="ClickBtn">
           Logout
           <i class="fa-solid fa-arrow-right-from-bracket"></i>
@@ -67,6 +67,7 @@ export default {
     const userData = ref([]);
     const fileInput = ref(null);
     const userImage = ref("");
+    const manager = ref(false);
 
     const ClickBtn = () => {
       loginStatus.value = false;
@@ -75,6 +76,12 @@ export default {
       localStorage.removeItem("userName");
 
       router.push("/login");
+    };
+
+    const IdendityCheck = () => {
+      if (userMail.value === "yuhsin099@gmail.com") {
+        manager.value = true;
+      }
     };
 
     const ClickManage = () => {
@@ -195,6 +202,8 @@ export default {
       userName.value = localStorage.getItem("userName");
 
       await GetUserInfo();
+
+      IdendityCheck();
     });
 
     return {
@@ -206,7 +215,9 @@ export default {
       userData,
       userImage,
       fileInput,
+      manager,
       ClickBtn,
+      IdendityCheck,
       ClickManage,
       ModifyInfo,
       GetUserInfo,

@@ -1,6 +1,12 @@
 <template>
   <nav v-if="showNav">
     <div class="mark">
+      <i
+        class="fa-solid fa-bars"
+        id="menu"
+        v-if="loginStatus"
+        @click="ClickMenu"
+      ></i>
       <i class="fa-solid fa-seedling"></i>
       Flower
     </div>
@@ -23,11 +29,18 @@
       </router-link>
     </div>
   </nav>
+  <div class="mobile-flame" v-if="showMenu">
+    <router-link to="/">Home</router-link>
+    <router-link to="/about">About</router-link>
+    <router-link to="/products">Products</router-link>
+    <router-link to="/review">Review</router-link>
+    <router-link to="/contact">Contact</router-link>
+  </div>
   <router-view />
 </template>
 
 <script>
-import { onMounted, computed, watch } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import { useRoute } from "vue-router";
 import { userMail, userName, loginStatus } from "@/components/LoginPage.vue";
 import { showNav } from "@/components/UserPage.vue";
@@ -35,8 +48,12 @@ import { showNav } from "@/components/UserPage.vue";
 export default {
   setup() {
     const route = useRoute();
-
     const isBackPage = computed(() => route.path.includes("back"));
+    const showMenu = ref(false);
+
+    const ClickMenu = () => {
+      showMenu.value = !showMenu.value;
+    };
 
     watch(isBackPage, (newValue) => {
       if (newValue) {
@@ -44,6 +61,10 @@ export default {
       } else {
         showNav.value = true;
       }
+    });
+
+    watch(route, () => {
+      showMenu.value = false;
     });
 
     onMounted(() => {
@@ -65,6 +86,8 @@ export default {
       userName,
       loginStatus,
       showNav,
+      showMenu,
+      ClickMenu,
     };
   },
 };
@@ -107,10 +130,14 @@ nav a:focus {
 }
 .mark i {
   color: #79ff79;
+  margin-right: 5px;
 }
 .mark {
   font-size: 30px;
   font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .text-flame a {
   color: #adadad;
@@ -119,5 +146,45 @@ nav a:focus {
 .icon-flame a {
   color: #000000;
   margin: 0 5px;
+}
+#menu {
+  display: none;
+  margin-right: 20px;
+  font-size: 20px;
+  color: #000000;
+  cursor: pointer;
+}
+.mobile-flame {
+  background-color: #ffd9ec;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+.mobile-flame a {
+  width: 90%;
+  height: 25px;
+  color: #adadad;
+  font-size: 18px;
+  line-height: 25px;
+  text-align: left;
+  text-decoration: none;
+  background-color: #ffffff;
+  border: 1px solid #adadad;
+  border-radius: 10px;
+  margin: 5px 0;
+  padding: 5px;
+}
+
+@media (max-width: 750px) {
+  #menu {
+    display: block;
+  }
+  .text-flame {
+    display: none;
+  }
 }
 </style>

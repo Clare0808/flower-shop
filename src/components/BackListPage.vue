@@ -1,6 +1,7 @@
 <template>
   <div class="list-page">
     <div class="title">Products List</div>
+    <div class="empty" v-if="listData.length === 0">Nothing here.</div>
     <div class="container">
       <div class="flame" v-for="(l, index) in listData" :key="index">
         <div class="list">
@@ -57,6 +58,11 @@ export default {
   padding-bottom: 10px;
   margin-bottom: 10px;
   border-bottom: 2px solid #ff79bc;
+}
+.empty {
+  color: #adadad;
+  font-size: 24px;
+  margin-top: 50px;
 }
 .container {
   max-height: 92%;

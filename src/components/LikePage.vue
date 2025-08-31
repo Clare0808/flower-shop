@@ -5,6 +5,9 @@
       <span style="color: #ff79bc">Favorate</span>
     </div>
     <div class="success" v-if="showSuccess">{{ successMsg }}</div>
+    <div class="empty" v-if="likeData.length === 0">
+      Add your favorate flower !
+    </div>
     <div class="container">
       <div class="flame" v-for="(p, index) in likeData" :key="index">
         <img :src="p.image" />
@@ -106,12 +109,17 @@ export default {
   text-align: center;
   font-size: 18px;
 }
+.empty {
+  color: #adadad;
+  font-size: 24px;
+  margin-top: 50px;
+}
 .container {
   width: 85%;
   padding: 50px;
   display: grid;
   grid-template-columns: repeat(3, 30%);
-  grid-template-rows: repeat(2, 450px);
+  grid-template-rows: repeat(2, 400px);
   gap: 20px;
   justify-content: center;
   align-items: center;
@@ -123,6 +131,7 @@ img {
   width: 100%;
 }
 .item-flame {
+  width: 100%;
   margin: 20px 0;
   text-align: start;
   display: flex;
@@ -146,5 +155,16 @@ i {
 }
 i:hover {
   color: #ffd9ec;
+}
+
+@media (max-width: 770px) {
+  .container {
+    grid-template-columns: repeat(2, 45%);
+  }
+}
+@media (max-width: 500px) {
+  .container {
+    grid-template-columns: 80%;
+  }
 }
 </style>

@@ -110,4 +110,34 @@ img {
   background-color: #ff79bc;
   cursor: pointer;
 }
+
+@media (max-width: 1115px) {
+  .container {
+    display: block;
+  }
+  .text-flame {
+    padding-left: 0;
+    margin-top: 20px;
+  }
+}
+@media (max-width: 520px) {
+  .container {
+    padding: 20px;
+  }
+  .sec-title {
+    font-size: 40px;
+  }
+  .third-title {
+    font-size: 30px;
+  }
+  .description {
+    font-size: 15px;
+  }
+  .btn {
+    width: 80px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 15px;
+  }
+}
 </style>
