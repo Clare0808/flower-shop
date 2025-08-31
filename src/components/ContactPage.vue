@@ -4,40 +4,48 @@
       <span style="color: #ff79bc">Contact</span>
       Us
     </div>
-    <div class="success" v-if="showSuccess">{{ successMsg }}</div>
-    <div class="container">
-      <div class="input-flame">
-        <textarea
-          class="input-name"
-          type="text"
-          placeholder="Name"
-          v-model.trim="name"
-        ></textarea>
-        <textarea
-          type="text"
-          placeholder="Email"
-          v-model.trim="email"
-        ></textarea>
-        <textarea
-          type="text"
-          placeholder="Number"
-          v-model.trim="number"
-        ></textarea>
-        <textarea
-          class="input-msg"
-          type="text"
-          placeholder="Message"
-          v-model.trim="msg"
-        ></textarea>
-        <div class="btn" @click="SendComment">Send Message</div>
+    <transition name="slide">
+      <div class="error" v-if="showError">{{ errorMsg }}</div>
+    </transition>
+    <transition name="slide">
+      <div class="success" v-if="showSuccess">{{ successMsg }}</div>
+    </transition>
+    <transition name="fade">
+      <div class="container" v-if="showPage">
+        <div class="input-flame">
+          <textarea
+            class="input-name"
+            type="text"
+            placeholder="Name"
+            v-model.trim="name"
+          ></textarea>
+          <textarea
+            type="text"
+            placeholder="Email"
+            v-model.trim="email"
+          ></textarea>
+          <textarea
+            type="text"
+            placeholder="Number"
+            v-model.trim="number"
+          ></textarea>
+          <textarea
+            class="input-msg"
+            type="text"
+            placeholder="Message"
+            v-model.trim="msg"
+          ></textarea>
+          <div class="btn" @click="SendComment">Send Message</div>
+        </div>
+        <img src="@/assets/contact.jpg" />
       </div>
-      <img src="@/assets/contact.jpg" />
-    </div>
+    </transition>
   </div>
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { userMail } from "@/components/LoginPage.vue";
 
 export default {
   name: "ContactPage",
@@ -49,39 +57,46 @@ export default {
     const commentDate = ref("");
     const showSuccess = ref(false);
     const successMsg = ref("");
+    const showError = ref(false);
+    const errorMsg = ref("");
+    const showPage = ref(false);
 
     const SendComment = async () => {
-      HandleDate();
+      EmptyInput();
 
-      const response = await fetch("http://localhost:5000/api/sendcomment", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: name.value,
-          email: email.value,
-          number: number.value,
-          date: commentDate.value,
-          content: msg.value,
-        }),
-      });
+      if (!showError.value) {
+        HandleDate();
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
+        const response = await fetch("http://localhost:5000/api/sendcomment", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: name.value,
+            email: email.value,
+            number: number.value,
+            date: commentDate.value,
+            content: msg.value,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        successMsg.value = "Comment Send successfully!";
+        showSuccess.value = true;
+
+        name.value = "";
+        email.value = "";
+        number.value = "";
+        msg.value = "";
+
+        setTimeout(async () => {
+          showSuccess.value = false;
+        }, 2000);
       }
-
-      successMsg.value = "Comment Send successfully!";
-      showSuccess.value = true;
-
-      name.value = "";
-      email.value = "";
-      number.value = "";
-      msg.value = "";
-
-      setTimeout(async () => {
-        showSuccess.value = false;
-      }, 2000);
     };
 
     const HandleDate = () => {
@@ -94,15 +109,66 @@ export default {
       commentDate.value = `${year}-${month}-${day}`;
     };
 
+    const AutoInputInfo = async () => {
+      const response = await fetch("http://localhost:5000/api/info");
+      const data = await response.json();
+
+      const filterData = data.data.find(
+        (item) => item.email === userMail.value
+      );
+
+      name.value = filterData.name;
+      email.value = filterData.email;
+
+      if (filterData.number !== "None") {
+        number.value = filterData.number;
+      } else {
+        number.value = "";
+      }
+    };
+
+    const EmptyInput = () => {
+      if (name.value === "") {
+        errorMsg.value = "Name is required !";
+        showError.value = true;
+      } else if (email.value === "") {
+        errorMsg.value = "Email is required !";
+        showError.value = true;
+      } else if (number.value === "") {
+        errorMsg.value = "Number is required !";
+        showError.value = true;
+      } else if (msg.value === "") {
+        errorMsg.value = "Please enter your message !";
+        showError.value = true;
+      } else {
+        showError.value = false;
+      }
+
+      setTimeout(() => {
+        showError.value = false;
+      }, 2000);
+    };
+
+    onMounted(() => {
+      AutoInputInfo();
+      showPage.value = true;
+    });
+
     return {
+      userMail,
       name,
       email,
       number,
       msg,
       showSuccess,
       successMsg,
+      showError,
+      errorMsg,
+      showPage,
       SendComment,
       HandleDate,
+      AutoInputInfo,
+      EmptyInput,
     };
   },
 };
@@ -121,6 +187,16 @@ export default {
   background-color: #ffd9ec;
   width: 90%;
   padding: 2px;
+}
+.error {
+  position: absolute;
+  right: 5%;
+  top: 80px;
+  background-color: #ffb5b5;
+  color: #ff2d2d;
+  padding: 20px;
+  text-align: center;
+  font-size: 18px;
 }
 .success {
   position: fixed;
@@ -185,10 +261,12 @@ textarea:focus {
   border-radius: 10px;
   text-align: center;
   line-height: 25px;
+  transition: all 0.3s ease;
 }
 .btn:hover {
   background-color: #ff79bc;
   cursor: pointer;
+  transform: scale(1.1);
 }
 img {
   width: 100%;
@@ -201,5 +279,35 @@ img {
     display: flex;
     flex-direction: column;
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 1s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+}
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.6s ease;
+}
+.slide-enter-from,
+.slide-leave-to {
+  opacity: 0;
+  transform: translateX(20px);
+}
+.slide-enter-to,
+.slide-leave-from {
+  opacity: 1;
+  transform: translateX(0);
 }
 </style>

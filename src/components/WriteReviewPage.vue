@@ -4,8 +4,12 @@
       Write
       <span style="color: #ff79bc">Review</span>
     </div>
-    <div class="error" v-if="showError">{{ errorMsg }}</div>
-    <div class="success" v-if="showSuccess">{{ successMsg }}</div>
+    <transition name="slide">
+      <div class="error" v-if="showError">{{ errorMsg }}</div>
+    </transition>
+    <transition name="slide">
+      <div class="success" v-if="showSuccess">{{ successMsg }}</div>
+    </transition>
     <div class="container">
       <div class="flame">
         <div class="sec-title">Give us some star !</div>
@@ -241,6 +245,7 @@ i {
   color: #ffd9ec;
   font-size: 22px;
   margin-right: 20px;
+  transition: all 0.3s ease;
 }
 i:hover {
   color: #ff79bc;
@@ -249,6 +254,7 @@ i:hover {
 .iClick {
   color: #ff79bc;
   cursor: pointer;
+  transform: scale(1.3);
 }
 textarea {
   width: calc(100% - 20px);
@@ -277,10 +283,12 @@ textarea:focus {
   line-height: 25px;
   padding: 5px;
   border-radius: 10px;
+  transition: all 0.3s ease;
 }
 .yes-btn:hover {
   cursor: pointer;
   background-color: #ff79bc;
+  transform: scale(1.1);
 }
 .no-btn {
   background-color: #ffd9ec;
@@ -291,5 +299,21 @@ textarea:focus {
   cursor: pointer;
   background-color: #ff79bc;
   color: #ffffff;
+  transform: scale(1.1);
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.6s ease;
+}
+.slide-enter-from,
+.slide-leave-to {
+  opacity: 0;
+  transform: translateX(20px);
+}
+.slide-enter-to,
+.slide-leave-from {
+  opacity: 1;
+  transform: translateX(0);
 }
 </style>

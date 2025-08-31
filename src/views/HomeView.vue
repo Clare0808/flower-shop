@@ -1,31 +1,40 @@
 <template>
   <div class="home">
-    <div class="container">
-      <div class="title">Fresh Flowers</div>
-      <div class="sec-title">Natural & Beautiful Flowers</div>
-      <div class="description">
-        Rose, Tulip, are native to Central Asia, Carnation, Known to symbolise
-        love and deep fascination, Lily, Daisy, a great symbol of happiness,
-        Camellia, symbolise love and affection...
+    <transition name="fade">
+      <div class="container" v-if="showPage">
+        <div class="title">Fresh Flowers</div>
+        <div class="sec-title">Natural & Beautiful Flowers</div>
+        <div class="description">
+          Rose, Tulip, are native to Central Asia, Carnation, Known to symbolise
+          love and deep fascination, Lily, Daisy, a great symbol of happiness,
+          Camellia, symbolise love and affection...
+        </div>
+        <div class="btn" @click="ClickBtn">Shop Now</div>
       </div>
-      <div class="btn" @click="ClickBtn">Shop Now</div>
-    </div>
+    </transition>
   </div>
 </template>
 
 <script>
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 
 export default {
   name: "HomeView",
   setup() {
     const router = useRouter();
+    const showPage = ref(false);
 
     const ClickBtn = () => {
       router.push("/products");
     };
 
+    onMounted(() => {
+      showPage.value = true;
+    });
+
     return {
+      showPage,
       ClickBtn,
     };
   },
@@ -77,10 +86,12 @@ export default {
   line-height: 25px;
   padding: 5px;
   border-radius: 10px;
+  transition: all 0.3s ease;
 }
 .btn:hover {
   background-color: #ff79bc;
   cursor: pointer;
+  transform: scale(1.1);
 }
 
 @media (max-width: 625px) {
@@ -104,5 +115,20 @@ export default {
     line-height: 20px;
     font-size: 15px;
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 1s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(100px);
+}
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
+  transform: translateY(0);
 }
 </style>

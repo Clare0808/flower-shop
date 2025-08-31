@@ -4,7 +4,9 @@
       <span style="color: #ff79bc">Modify</span>
       Information
     </div>
-    <div class="success" v-if="showSuccess">{{ successMsg }}</div>
+    <transition name="slide">
+      <div class="success" v-if="showSuccess">{{ successMsg }}</div>
+    </transition>
     <div class="container">
       <div class="flame">
         <div class="info-title">Original {{ modifyData.title }}</div>
@@ -185,19 +187,38 @@ input:focus {
   line-height: 25px;
   padding: 5px;
   border-radius: 10px;
+  transition: all 0.3s ease;
 }
 .yes-btn:hover {
   cursor: pointer;
   background-color: #ff79bc;
+  transform: scale(1.1);
 }
 .no-btn {
   background-color: #ffd9ec;
   color: #ff79bc;
   margin-right: 20px;
+  transition: all 0.3s ease;
 }
 .no-btn:hover {
   cursor: pointer;
   background-color: #ff79bc;
   color: #ffffff;
+  transform: scale(1.1);
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.6s ease;
+}
+.slide-enter-from,
+.slide-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+}
+.slide-enter-to,
+.slide-leave-from {
+  opacity: 1;
+  transform: translateY(0);
 }
 </style>

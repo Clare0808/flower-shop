@@ -4,31 +4,35 @@
       Your
       <span style="color: #ff79bc">Cart</span>
     </div>
-    <div class="success" v-if="showSuccess">{{ successMsg }}</div>
+    <transition name="slide">
+      <div class="success" v-if="showSuccess">{{ successMsg }}</div>
+    </transition>
     <div class="empty" v-if="cartData.length === 0">
       Add your favorate flower !
     </div>
-    <div class="container">
-      <div class="flame" v-for="(c, index) in cartData" :key="index">
-        <div class="items-flame">
-          <img :src="c.img" />
-          <div class="item-info">
-            <div class="text-flame">
-              <div class="item-name">{{ c.name }}</div>
-              <div class="item-quan">x{{ c.quantity }}</div>
+    <transition name="fade">
+      <div class="container" v-if="showPage">
+        <div class="flame" v-for="(c, index) in cartData" :key="index">
+          <div class="items-flame">
+            <img :src="c.img" />
+            <div class="item-info">
+              <div class="text-flame">
+                <div class="item-name">{{ c.name }}</div>
+                <div class="item-quan">x{{ c.quantity }}</div>
+              </div>
+              <div class="num-flame">
+                <div class="item-price">${{ c.price }}</div>
+                <div class="total-price">${{ c.total }}</div>
+              </div>
             </div>
-            <div class="num-flame">
-              <div class="item-price">${{ c.price }}</div>
-              <div class="total-price">${{ c.total }}</div>
+            <div class="buy-flame">
+              <div class="buy-btn" @click="SendBuy(index)">Buy</div>
+              <div class="delete" @click="DeleteCart(index)">Delete</div>
             </div>
-          </div>
-          <div class="buy-flame">
-            <div class="buy-btn" @click="SendBuy(index)">Buy</div>
-            <div class="delete" @click="DeleteCart(index)">Delete</div>
           </div>
         </div>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -43,6 +47,7 @@ export default {
     const showSuccess = ref(false);
     const successMsg = ref("");
     const buyDate = ref("");
+    const showPage = ref(false);
 
     const GetCartData = async () => {
       const response = await fetch("http://localhost:5000/api/getcart");
@@ -127,6 +132,7 @@ export default {
 
     onMounted(() => {
       GetCartData();
+      showPage.value = true;
     });
 
     return {
@@ -135,6 +141,7 @@ export default {
       showSuccess,
       successMsg,
       buyDate,
+      showPage,
       GetCartData,
       SendBuy,
       DeleteCart,
@@ -236,11 +243,13 @@ img {
   padding: 5px;
   border-radius: 10px;
   margin: 10px 0;
+  transition: all 0.3s ease;
 }
 .buy-btn:hover {
   background-color: #ff79bc;
   color: #ffffff;
   cursor: pointer;
+  transform: scale(1.1);
 }
 .delete {
   width: 100px;
@@ -252,11 +261,13 @@ img {
   padding: 5px;
   border-radius: 10px;
   margin: 10px 0;
+  transition: all 0.3s ease;
 }
 .delete:hover {
   color: #ffffff;
   background-color: #ff79bc;
   cursor: pointer;
+  transform: scale(1.1);
 }
 
 @media (max-width: 1000px) {
@@ -287,5 +298,35 @@ img {
     line-height: 20px;
     font-size: 15px;
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 1s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+}
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.6s ease;
+}
+.slide-enter-from,
+.slide-leave-to {
+  opacity: 0;
+  transform: translateX(20px);
+}
+.slide-enter-to,
+.slide-leave-from {
+  opacity: 1;
+  transform: translateX(0);
 }
 </style>

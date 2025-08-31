@@ -4,22 +4,26 @@
       Your
       <span style="color: #ff79bc">Favorate</span>
     </div>
-    <div class="success" v-if="showSuccess">{{ successMsg }}</div>
+    <transition name="slide">
+      <div class="success" v-if="showSuccess">{{ successMsg }}</div>
+    </transition>
     <div class="empty" v-if="likeData.length === 0">
       Add your favorate flower !
     </div>
-    <div class="container">
-      <div class="flame" v-for="(p, index) in likeData" :key="index">
-        <img :src="p.image" />
-        <div class="item-flame">
-          <div class="text-flame">
-            <div class="name">{{ p.product }}</div>
-            <div class="price">{{ p.price }}</div>
+    <transition name="fade">
+      <div class="container" v-if="showPage">
+        <div class="flame" v-for="(p, index) in likeData" :key="index">
+          <img :src="p.image" />
+          <div class="item-flame">
+            <div class="text-flame">
+              <div class="name">{{ p.product }}</div>
+              <div class="price">{{ p.price }}</div>
+            </div>
+            <i class="fa-solid fa-heart" @click="RemoveLike(p.product)"></i>
           </div>
-          <i class="fa-solid fa-heart" @click="RemoveLike(p.product)"></i>
         </div>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -33,6 +37,7 @@ export default {
     const likeData = ref([]);
     const showSuccess = ref(false);
     const successMsg = ref("");
+    const showPage = ref(false);
 
     const GetLikeData = async () => {
       const response = await fetch("http://localhost:5000/api/getlike");
@@ -70,6 +75,7 @@ export default {
 
     onMounted(() => {
       GetLikeData();
+      showPage.value = true;
     });
 
     return {
@@ -77,6 +83,7 @@ export default {
       likeData,
       showSuccess,
       successMsg,
+      showPage,
       GetLikeData,
       RemoveLike,
     };
@@ -119,7 +126,7 @@ export default {
   padding: 50px;
   display: grid;
   grid-template-columns: repeat(3, 30%);
-  grid-template-rows: repeat(2, 400px);
+  grid-template-rows: repeat(2, 450px);
   gap: 20px;
   justify-content: center;
   align-items: center;
@@ -152,12 +159,14 @@ i {
 }
 i {
   padding-right: 20px;
+  transition: all 0.3s ease;
 }
 i:hover {
   color: #ffd9ec;
+  transform: scale(1.2);
 }
 
-@media (max-width: 770px) {
+@media (max-width: 960px) {
   .container {
     grid-template-columns: repeat(2, 45%);
   }
@@ -166,5 +175,35 @@ i:hover {
   .container {
     grid-template-columns: 80%;
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 1s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+}
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.6s ease;
+}
+.slide-enter-from,
+.slide-leave-to {
+  opacity: 0;
+  transform: translateX(20px);
+}
+.slide-enter-to,
+.slide-leave-from {
+  opacity: 1;
+  transform: translateX(0);
 }
 </style>

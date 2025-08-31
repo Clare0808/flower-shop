@@ -4,27 +4,33 @@
       Least
       <span style="color: #ff79bc">Product</span>
     </div>
-    <div class="success" v-if="showSuccess">{{ successMsg }}</div>
-    <div class="container">
-      <div class="pro-flame" v-for="(p, index) in productsData" :key="index">
-        <div class="img-flame">
-          <img :src="p.img" @click="ShowFunction(index)" />
-          <div class="function">
-            <i
-              class="fa-solid fa-heart"
-              :class="{ liked: p.like }"
-              @click="SendLikeData(index)"
-            ></i>
-            <div class="add" @click="ShowBuyPage(index)">Add To Cart</div>
-            <i class="fa-solid fa-share"></i>
+    <transition name="slide">
+      <div class="success" v-if="showSuccess">{{ successMsg }}</div>
+    </transition>
+    <transition name="fade">
+      <div class="container" v-if="showPage">
+        <div class="pro-flame" v-for="(p, index) in productsData" :key="index">
+          <div class="img-flame">
+            <img :src="p.img" @click="ShowFunction(index)" />
+            <div class="function">
+              <i
+                class="fa-solid fa-heart"
+                :class="{ liked: p.like }"
+                @click="SendLikeData(index)"
+              ></i>
+              <div class="add" @click="ShowBuyPage(index)">Add To Cart</div>
+              <i class="fa-solid fa-share"></i>
+            </div>
           </div>
+          <div class="name">{{ p.name }}</div>
+          <div class="price">${{ p.price }}</div>
         </div>
-        <div class="name">{{ p.name }}</div>
-        <div class="price">${{ p.price }}</div>
       </div>
-    </div>
+    </transition>
 
-    <BuyPage class="buy-page" v-if="showBuy" />
+    <transition name="fade">
+      <BuyPage class="buy-page" v-if="showBuy" />
+    </transition>
   </div>
 </template>
 
@@ -90,6 +96,7 @@ export default {
     const hover = ref(false);
     const successMsg = ref("");
     const showSuccess = ref(false);
+    const showPage = ref(false);
 
     const ShowFunction = (index) => {
       hover.value = !hover.value;
@@ -217,6 +224,7 @@ export default {
 
     onMounted(() => {
       HandleLike();
+      showPage.value = true;
     });
 
     return {
@@ -227,6 +235,7 @@ export default {
       successMsg,
       showSuccess,
       showBuy,
+      showPage,
       ShowFunction,
       SendLikeData,
       HandleLike,
@@ -343,5 +352,35 @@ i.liked {
   .buy-page {
     width: 70%;
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 1s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(100px);
+}
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.6s ease;
+}
+.slide-enter-from,
+.slide-leave-to {
+  opacity: 0;
+  transform: translateX(20px);
+}
+.slide-enter-to,
+.slide-leave-from {
+  opacity: 1;
+  transform: translateX(0);
 }
 </style>

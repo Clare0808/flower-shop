@@ -4,35 +4,50 @@
       About
       <span style="color: #ff79bc">Us</span>
     </div>
-    <div class="container">
-      <div class="img-flame">
-        <img src="@/assets/about.jpg" />
-        <div class="sec-title">Best Flower Sellers</div>
-      </div>
-      <div class="text-flame">
-        <div class="third-title">Why Choose Us</div>
-        <div class="description">
-          Rose, Tulip, are native to Central Asia, Carnation, Known to symbolise
-          love and deep fascination, Lily, Daisy, a great symbol of happiness,
-          Camellia, symbolise love and affection... Rose, Tulip, are native to
-          Central Asia, Carnation, Known to symbolise love and deep fascination,
-          Lily, Daisy, a great symbol of happiness, Camellia, symbolise love and
-          affection...
+    <transition name="fade">
+      <div class="container" v-if="showPage">
+        <div class="img-flame">
+          <img src="@/assets/about.jpg" />
+          <div class="sec-title">Best Flower Sellers</div>
         </div>
-        <div class="description">
-          Rose, Tulip, are native to Central Asia, Carnation, Known to symbolise
-          love and deep fascination, Lily, Daisy, a great symbol of happiness,
-          Camellia, symbolise love and affection...
+        <div class="text-flame">
+          <div class="third-title">Why Choose Us</div>
+          <div class="description">
+            Rose, Tulip, are native to Central Asia, Carnation, Known to
+            symbolise love and deep fascination, Lily, Daisy, a great symbol of
+            happiness, Camellia, symbolise love and affection... Rose, Tulip,
+            are native to Central Asia, Carnation, Known to symbolise love and
+            deep fascination, Lily, Daisy, a great symbol of happiness,
+            Camellia, symbolise love and affection...
+          </div>
+          <div class="description">
+            Rose, Tulip, are native to Central Asia, Carnation, Known to
+            symbolise love and deep fascination, Lily, Daisy, a great symbol of
+            happiness, Camellia, symbolise love and affection...
+          </div>
+          <div class="btn">Learn More</div>
         </div>
-        <div class="btn">Learn More</div>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
 
 <script>
+import { ref, onMounted } from "vue";
+
 export default {
   name: "AboutView",
+  setup() {
+    const showPage = ref(false);
+
+    onMounted(() => {
+      showPage.value = true;
+    });
+
+    return {
+      showPage,
+    };
+  },
 };
 </script>
 
@@ -105,10 +120,12 @@ img {
   padding: 5px;
   border-radius: 10px;
   margin-top: 10px;
+  transition: all 0.3s ease;
 }
 .btn:hover {
   background-color: #ff79bc;
   cursor: pointer;
+  transform: scale(1.1);
 }
 
 @media (max-width: 1115px) {
@@ -139,5 +156,20 @@ img {
     line-height: 20px;
     font-size: 15px;
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 1s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(40px);
+}
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
+  transform: translateY(0);
 }
 </style>

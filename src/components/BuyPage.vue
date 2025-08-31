@@ -171,11 +171,13 @@ img {
   width: 20px;
   height: 20px;
   line-height: 20px;
+  transition: all 0.3s ease;
 }
 .btn:hover {
   cursor: pointer;
   background-color: #ff79bc;
   color: #ffffff;
+  transform: scale(1.3);
 }
 .content-total {
   font-size: 22px;
@@ -196,10 +198,12 @@ img {
   line-height: 25px;
   padding: 5px;
   border-radius: 10px;
+  transition: all 0.3s ease;
 }
 .send:hover {
   background-color: #ff79bc;
   cursor: pointer;
+  transform: scale(1.1);
 }
 .no-btn {
   background-color: #ffd9ec;
@@ -210,5 +214,6 @@ img {
   cursor: pointer;
   background-color: #ff79bc;
   color: #ffffff;
+  transform: scale(1.1);
 }
 </style>

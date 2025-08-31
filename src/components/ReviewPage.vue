@@ -4,26 +4,30 @@
       Customer's
       <span style="color: #ff79bc">Review</span>
     </div>
-    <div class="flame">
-      <div class="review-flame" v-for="(r, index) in reviewData" :key="index">
-        <div class="star-flame">
-          <div v-for="i in r.score" :key="i">
-            <i class="fa-solid fa-star"></i>
+    <transition name="fade">
+      <div class="flame" v-if="showPage">
+        <div class="review-flame" v-for="(r, index) in reviewData" :key="index">
+          <div class="star-flame">
+            <div v-for="i in r.score" :key="i">
+              <i class="fa-solid fa-star"></i>
+            </div>
           </div>
-        </div>
-        <div class="content">{{ r.content }}</div>
-        <div class="user-info">
-          <img :src="r.img" />
-          <div class="text-flame">
-            <div class="name">{{ r.name }}</div>
-            <div class="date">{{ r.date }}</div>
+          <div class="content">{{ r.content }}</div>
+          <div class="user-info">
+            <img :src="r.img" />
+            <div class="text-flame">
+              <div class="name">{{ r.name }}</div>
+              <div class="date">{{ r.date }}</div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </transition>
     <div class="btn" @click="ShowWritePage">+</div>
 
-    <WriteReviewPage class="write-page" v-if="showWrite" />
+    <transition name="fade">
+      <WriteReviewPage class="write-page" v-if="showWrite" />
+    </transition>
   </div>
 </template>
 
@@ -41,6 +45,7 @@ export default {
   },
   setup() {
     const reviewData = ref([]);
+    const showPage = ref(false);
 
     const ShowWritePage = () => {
       showWrite.value = true;
@@ -59,12 +64,14 @@ export default {
 
     onMounted(() => {
       GetReviewData();
+      showPage.value = true;
     });
 
     return {
       userMail,
       reviewData,
       showWrite,
+      showPage,
       ShowWritePage,
       GetReviewData,
     };
@@ -145,11 +152,13 @@ img {
   position: fixed;
   bottom: 20px;
   right: 20px;
+  transition: all 0.3s ease;
 }
 .btn:hover {
   background-color: #ff79bc;
   color: #ffffff;
   cursor: pointer;
+  transform: scale(1.1);
 }
 
 .write-page {
@@ -171,5 +180,20 @@ img {
   .write-page {
     width: 70%;
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 1s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(100px);
+}
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
+  transform: translateY(0);
 }
 </style>

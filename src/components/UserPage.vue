@@ -4,45 +4,51 @@
       <span style="color: #ff79bc">User</span>
       Information
     </div>
-    <div class="container">
-      <div class="img-flame">
-        <img :src="userImage" />
-        <i class="fa-solid fa-pencil" id="img-pen" @click="TriggleFileInput">
-          <input
-            type="file"
-            accept="image/*"
-            @change="UploadImage"
-            ref="fileInput"
-            style="display: none"
-          />
-        </i>
-      </div>
-      <div class="text-flame">
-        <div v-for="(d, index) in userData" :key="index">
-          <div class="info">
-            <div class="info-title">{{ d.title }}</div>
-            <div class="detail-info">
-              <div class="info-content">{{ d.content }}</div>
-              <i
-                class="fa-solid fa-pencil"
-                id="pen"
-                v-if="d.title !== 'Email'"
-                @click="ModifyInfo(index)"
-              ></i>
+    <transition name="fade">
+      <div class="container" v-if="showPage">
+        <div class="img-flame">
+          <img :src="userImage" />
+          <i class="fa-solid fa-pencil" id="img-pen" @click="TriggleFileInput">
+            <input
+              type="file"
+              accept="image/*"
+              @change="UploadImage"
+              ref="fileInput"
+              style="display: none"
+            />
+          </i>
+        </div>
+        <div class="text-flame">
+          <div v-for="(d, index) in userData" :key="index">
+            <div class="info">
+              <div class="info-title">{{ d.title }}</div>
+              <div class="detail-info">
+                <div class="info-content">{{ d.content }}</div>
+                <i
+                  class="fa-solid fa-pencil"
+                  id="pen"
+                  v-if="d.title !== 'Email'"
+                  @click="ModifyInfo(index)"
+                ></i>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="btn-flame">
-        <div class="manage-btn" @click="ClickManage" v-if="manager">Manage</div>
-        <div class="btn" @click="ClickBtn">
-          Logout
-          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        <div class="btn-flame">
+          <div class="manage-btn" @click="ClickManage" v-if="manager">
+            Manage
+          </div>
+          <div class="btn" @click="ClickBtn">
+            Logout
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          </div>
         </div>
       </div>
-    </div>
+    </transition>
 
-    <ModifyPage class="modify-page" v-if="penClick" />
+    <transition name="fade">
+      <ModifyPage class="modify-page" v-if="penClick" />
+    </transition>
   </div>
 </template>
 
@@ -68,6 +74,7 @@ export default {
     const fileInput = ref(null);
     const userImage = ref("");
     const manager = ref(false);
+    const showPage = ref(false);
 
     const ClickBtn = () => {
       loginStatus.value = false;
@@ -204,6 +211,8 @@ export default {
       await GetUserInfo();
 
       IdendityCheck();
+
+      showPage.value = true;
     });
 
     return {
@@ -216,6 +225,7 @@ export default {
       userImage,
       fileInput,
       manager,
+      showPage,
       ClickBtn,
       IdendityCheck,
       ClickManage,
@@ -276,11 +286,13 @@ img {
   bottom: 3%;
   right: 13%;
   z-index: 2;
+  transition: all 0.3s ease;
 }
 #img-pen:hover {
   color: #ffffff;
   background-color: #ff79bc;
   cursor: pointer;
+  transform: scale(1.2);
 }
 .info {
   position: relative;
@@ -306,10 +318,12 @@ img {
   position: absolute;
   bottom: 5px;
   right: 0;
+  transition: all 0.3s ease;
 }
 #pen:hover {
   color: #ff79bc;
   cursor: pointer;
+  transform: scale(1.2);
 }
 .info-content {
   font-size: 22px;
@@ -333,11 +347,13 @@ img {
   padding: 5px;
   border-radius: 10px;
   margin: 0 20px;
+  transition: all 0.3s ease;
 }
 .manage-btn:hover {
   background-color: #ff79bc;
   color: #ffffff;
   cursor: pointer;
+  transform: scale(1.1);
 }
 .btn {
   width: 100px;
@@ -348,10 +364,12 @@ img {
   line-height: 25px;
   padding: 5px;
   border-radius: 10px;
+  transition: all 0.3s ease;
 }
 .btn:hover {
   background-color: #ff79bc;
   cursor: pointer;
+  transform: scale(1.1);
 }
 
 .modify-page {
@@ -359,5 +377,20 @@ img {
   position: absolute;
   top: 25%;
   z-index: 2;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 1s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+}
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
+  transform: translateY(0);
 }
 </style>

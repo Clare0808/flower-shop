@@ -1,49 +1,57 @@
 <template>
   <div class="login-page">
     <div class="title">Login</div>
-    <div class="error" v-if="showError">{{ errorMsg }}</div>
-    <div class="success" v-if="showSuccess">{{ successMsg }}</div>
-    <div class="container" v-if="showLogin">
-      <div class="flame">
-        <div class="input-title">Email</div>
-        <input type="text" v-model.trim="email" />
+    <transition name="slide">
+      <div class="error" v-if="showError">{{ errorMsg }}</div>
+    </transition>
+    <transition name="slide">
+      <div class="success" v-if="showSuccess">{{ successMsg }}</div>
+    </transition>
+    <transition name="fade" mode="in-out">
+      <div class="container" v-if="showLogin">
+        <div class="flame">
+          <div class="input-title">Email</div>
+          <input type="text" v-model.trim="email" />
+        </div>
+        <div class="flame">
+          <div class="input-title">Password</div>
+          <input type="password" v-model.trim="password" />
+        </div>
+        <div class="btn-flame">
+          <div class="login-btn" @click="HandleLogin">Login</div>
+          <div class="sign-in-btn" @click="ShowSignInPage">Sing in</div>
+        </div>
       </div>
-      <div class="flame">
-        <div class="input-title">Password</div>
-        <input type="password" v-model.trim="password" />
+    </transition>
+    <transition name="fade" mode="in-out">
+      <div class="container" v-if="showSignIn">
+        <div class="flame">
+          <div class="input-title">Nmae</div>
+          <input type="text" v-model.trim="name" />
+        </div>
+        <div class="flame">
+          <div class="input-title">Email</div>
+          <input type="text" v-model.trim="email" />
+        </div>
+        <div class="flame">
+          <div class="input-title">Password</div>
+          <input type="password" v-model.trim="password" />
+        </div>
+        <div class="flame">
+          <div class="input-title">Confirm Password</div>
+          <input type="password" v-model.trim="conPassword" />
+        </div>
+        <div class="btn-flame">
+          <div class="login-btn" @click="HandleSignIn">Sign in</div>
+          <div class="sign-in-btn" @click="ShowLoginPage">Login</div>
+        </div>
       </div>
-      <div class="btn-flame">
-        <div class="login-btn" @click="HandleLogin">Login</div>
-        <div class="sign-in-btn" @click="ShowSignInPage">Sing in</div>
-      </div>
-    </div>
-    <div class="container" v-if="showSignIn">
-      <div class="flame">
-        <div class="input-title">Nmae</div>
-        <input type="text" v-model.trim="name" />
-      </div>
-      <div class="flame">
-        <div class="input-title">Email</div>
-        <input type="text" v-model.trim="email" />
-      </div>
-      <div class="flame">
-        <div class="input-title">Password</div>
-        <input type="password" v-model.trim="password" />
-      </div>
-      <div class="flame">
-        <div class="input-title">Confirm Password</div>
-        <input type="password" v-model.trim="conPassword" />
-      </div>
-      <div class="btn-flame">
-        <div class="login-btn" @click="HandleSignIn">Sign in</div>
-        <div class="sign-in-btn" @click="ShowLoginPage">Login</div>
-      </div>
-    </div>
+    </transition>
   </div>
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 
 export const userMail = ref("");
@@ -54,7 +62,7 @@ export const loginStatus = ref(false);
 export default {
   name: "LoginPage",
   setup() {
-    const showLogin = ref(true);
+    const showLogin = ref(false);
     const showSignIn = ref(false);
     const name = ref("");
     const email = ref("");
@@ -230,6 +238,10 @@ export default {
       conPassword.value = "";
     };
 
+    onMounted(() => {
+      showLogin.value = true;
+    });
+
     return {
       showLogin,
       showSignIn,
@@ -334,10 +346,12 @@ input:focus {
   padding: 5px;
   border-radius: 10px;
   margin: 0 20px;
+  transition: all 0.3s ease;
 }
 .login-btn:hover {
   background-color: #ff79bc;
   cursor: pointer;
+  transform: scale(1.1);
 }
 .sign-in-btn {
   width: 100px;
@@ -349,10 +363,48 @@ input:focus {
   padding: 5px;
   border-radius: 10px;
   margin: 0 20px;
+  transition: all 0.3s ease;
 }
 .sign-in-btn:hover {
   background-color: #ff79bc;
   color: #ffffff;
   cursor: pointer;
+  transform: scale(1.1);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 1s ease;
+}
+.fade-enter-from {
+  opacity: 0;
+  transform: translateY(100%);
+}
+.fade-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+.fade-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(100%);
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.6s ease;
+}
+.slide-enter-from,
+.slide-leave-to {
+  opacity: 0;
+  transform: translateX(20px);
+}
+.slide-enter-to,
+.slide-leave-from {
+  opacity: 1;
+  transform: translateX(0);
 }
 </style>

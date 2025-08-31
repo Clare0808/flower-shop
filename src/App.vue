@@ -29,13 +29,15 @@
       </router-link>
     </div>
   </nav>
-  <div class="mobile-flame" v-if="showMenu">
-    <router-link to="/">Home</router-link>
-    <router-link to="/about">About</router-link>
-    <router-link to="/products">Products</router-link>
-    <router-link to="/review">Review</router-link>
-    <router-link to="/contact">Contact</router-link>
-  </div>
+  <transition name="slide">
+    <div class="mobile-flame" v-if="showMenu">
+      <router-link to="/">Home</router-link>
+      <router-link to="/about">About</router-link>
+      <router-link to="/products">Products</router-link>
+      <router-link to="/review">Review</router-link>
+      <router-link to="/contact">Contact</router-link>
+    </div>
+  </transition>
   <router-view />
 </template>
 
@@ -121,6 +123,7 @@ nav {
 nav a {
   text-decoration: none;
   font-size: 20px;
+  transition: all 0.3s ease;
 }
 nav a:hover {
   color: #ff79bc;
@@ -153,6 +156,14 @@ nav a:focus {
   font-size: 20px;
   color: #000000;
   cursor: pointer;
+  transition: all 0.6s ease;
+}
+#menu:hover {
+  color: #ffffff;
+  background-color: #ff79bc;
+  border-radius: 50%;
+  padding: 5px;
+  transform: rotate(180deg);
 }
 .mobile-flame {
   background-color: #ffd9ec;
@@ -178,6 +189,9 @@ nav a:focus {
   margin: 5px 0;
   padding: 5px;
 }
+.mobile-flame a:hover {
+  border-color: #ff79bc;
+}
 
 @media (max-width: 750px) {
   #menu {
@@ -186,5 +200,20 @@ nav a:focus {
   .text-flame {
     display: none;
   }
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.6s ease;
+}
+.slide-enter-from,
+.slide-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+.slide-enter-to,
+.slide-leave-from {
+  opacity: 1;
+  transform: translateY(0);
 }
 </style>
