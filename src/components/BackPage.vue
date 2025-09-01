@@ -5,28 +5,28 @@
         <i
           class="fa-solid fa-file"
           @click="ClickPotion(0)"
-          :class="{ active: btnClicked[0] }"
+          :class="{ menuActive: btnClicked[0] }"
         ></i>
       </router-link>
       <router-link to="/backreview">
         <i
           class="fa-solid fa-thumbs-up"
           @click="ClickPotion(1)"
-          :class="{ active: btnClicked[1] }"
+          :class="{ menuActive: btnClicked[1] }"
         ></i>
       </router-link>
       <router-link to="/backchart">
         <i
           class="fa-solid fa-chart-line"
           @click="ClickPotion(2)"
-          :class="{ active: btnClicked[2] }"
+          :class="{ menuActive: btnClicked[2] }"
         ></i>
       </router-link>
       <router-link to="/backcomment">
         <i
           class="fa-solid fa-comment"
           @click="ClickPotion(3)"
-          :class="{ active: btnClicked[3] }"
+          :class="{ menuActive: btnClicked[3] }"
         ></i>
       </router-link>
       <i class="fa-solid fa-arrow-left" id="arrow" @click="ClickArrow"></i>
@@ -102,7 +102,7 @@ i {
 i:hover {
   color: #ff79bc;
 }
-.active {
+.menuActive {
   color: #ff79bc;
 }
 #arrow {

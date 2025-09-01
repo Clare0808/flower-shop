@@ -6,6 +6,7 @@
         id="menu"
         v-if="loginStatus"
         @click="ClickMenu"
+        :class="{ active: showMenu }"
       ></i>
       <i class="fa-solid fa-seedling"></i>
       Flower
@@ -160,6 +161,12 @@ nav a:focus {
 }
 #menu:hover {
   color: #ffffff;
+  background-color: #ff79bc;
+  border-radius: 50%;
+  padding: 5px;
+}
+.active {
+  color: #ffffff !important;
   background-color: #ff79bc;
   border-radius: 50%;
   padding: 5px;
